@@ -1,0 +1,18 @@
+.navbar{
+    background-color: #f28c8f;
+    height: 75px;
+    width: 100rw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.navbar img{
+    height: 50px;
+    width: auto;
+}
+
+.navbar p{
+    font-size: 20pt;
+}

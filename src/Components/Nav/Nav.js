@@ -1,10 +1,11 @@
-import React from 'react'
-import './Nav.css'
+import React from 'react';
+import './Nav.css';
+import logo from "../../local/budgetLogo.png"
 
 function Nav() {
     return (
         <div class="navbar">
-            <img src={"../../../public/budgetLogo.png"}/>
+            <img src={logo}/>
             <p>Brutal Budget.</p>
         </div>
     )
