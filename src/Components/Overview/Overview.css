@@ -1,0 +1,59 @@
+.main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.selector{
+    width: 250px;
+    height: 40px;
+    border-radius: 20px;
+    background-image:linear-gradient(rgba(245, 245, 245, .25), rgba(245, 245, 245, .6));
+    box-shadow: 2px 2px 5px gray;
+    margin: 30px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.selectorCenter{
+    border-left: gray 1px;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+}
+
+.overview{
+    width: 75%;
+    max-width: 500px;
+    height: 200px;
+    background-color: #2d6072;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px gray;
+
+}
+
+.transactions{
+    background-color: #558fa6;
+    width: 75%;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px gray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+table{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+
+}
+
+td{
+    width: 150px;
+    padding: 10px;
+    margin: 15px;
+}

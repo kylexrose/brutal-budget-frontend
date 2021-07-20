@@ -36,7 +36,6 @@ export class Login extends Component {
           username : this.state.username,
           password : this.state.password
         }
-        console.log(loginCred)
         const success = await Axios.post('/api/users/login', loginCred)
         let jwtToken = success.data.payload;
         console.log(success)

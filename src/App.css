@@ -1,6 +1,8 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Acme&display=swap');
-
+@tailwind base;
+@tailwind components;
+@tailwing utilities;
 *{
     font-family: 'Acme', sans-serif;
 }
