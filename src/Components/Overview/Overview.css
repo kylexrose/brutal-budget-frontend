@@ -37,7 +37,7 @@
 .transactions{
     background-color: #558fa6;
     width: 75%;
-    max-width: 500px;
+    max-width: 750px;
     border-radius: 10px;
     box-shadow: 2px 2px 5px gray;
     display: flex;
@@ -45,15 +45,16 @@
     align-items: center;
 }
 
-table{
-    display: flex;
-    width: 100%;
-    justify-content: center;
-
+thead{
+    font-weight: bolder;
 }
 
 td{
     width: 150px;
     padding: 10px;
     margin: 15px;
+}
+
+.arrow{
+    cursor: pointer;
 }
