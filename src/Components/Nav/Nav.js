@@ -23,7 +23,7 @@ export class Nav extends Component {
                             Profile
                             </NavLink>
                         ) : (
-                            <NavLink activeClassName="selected" to="/sign-up">
+                            <NavLink activeClassName="selected" to="/signup">
                             Sign up
                             </NavLink>
                         )}
