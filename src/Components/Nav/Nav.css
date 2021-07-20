@@ -3,7 +3,7 @@
     height: 75px;
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     color: white;
 }
@@ -15,4 +15,25 @@
 
 .navbar p{
     font-size: 20pt;
+}
+
+.logoContainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.right-side-nav ul{
+    display: flex;
+    list-style-type: none;
+
+}
+
+.right-side-nav li{
+    margin: 25px;
+}
+
+.right-side-nav li NavLink{
+    color: white;
+    text-decoration: none;
 }
