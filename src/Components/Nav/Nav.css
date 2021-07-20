@@ -17,10 +17,26 @@
     font-size: 20pt;
 }
 
+.menuIcon{
+    width: 300px;
+    display: flex;
+    align-items: center;
+}
+
+.menuIcon img{
+    height: 25px;
+    margin-left: 20px;
+}
+
 .logoContainer{
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 300px;
+}
+
+.right-side-nav{
+    width: 300px;
 }
 
 .right-side-nav ul{

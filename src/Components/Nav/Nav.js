@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import './Nav.css';
 import logo from "../../local/budgetLogo.png"
 import { NavLink } from 'react-router-dom';
+import menu from '../../local/menuIcon.png'
 
 export class Nav extends Component {
     render() {
         return (
             <div className="navbar">
                 <div className="menuIcon">
-                    <img src="#"/>
+                    <img src={menu} alt=""/>
                 </div>
                 <div className="logoContainer">
                     <img src={logo} alt="logo"/>
