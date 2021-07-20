@@ -26,6 +26,7 @@
 .menuIcon img{
     height: 25px;
     margin-left: 20px;
+    filter: invert(1);
 }
 
 .logoContainer{
@@ -37,6 +38,8 @@
 
 .right-side-nav{
     width: 300px;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .right-side-nav ul{
@@ -46,10 +49,10 @@
 }
 
 .right-side-nav li{
-    margin: 25px;
+    margin-right: 30px;
 }
 
-.right-side-nav li NavLink{
+.right-side-nav li a{
     color: white;
     text-decoration: none;
 }
