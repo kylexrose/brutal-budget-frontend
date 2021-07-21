@@ -5,6 +5,7 @@ import Login from './Components/Login/Login';
 import Nav from './Components/Nav/Nav';
 import Overview from './Components/Overview/Overview';
 import PrivateRoute from './Components/PrivateRoute/PrivateRoute'
+import Income from './Components/EnterIncome/Income';
 
 const MainRouter = (props) => {
     return(
@@ -22,7 +23,13 @@ const MainRouter = (props) => {
                 <PrivateRoute 
                 exact
                 path="/overview" 
-                component={Overview}/>
+                component={Overview}
+                user={props.user}/>
+                <PrivateRoute 
+                exact
+                path="/add-income" 
+                component={Income}
+                user={props.user}/>
             </>
         </Router>
     )
