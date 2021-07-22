@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import './Overview.css';
 import Axios from '../utils/Axios';
 import {PieChart} from 'react-minimal-pie-chart';
+import { Link } from 'react-router-dom';
 
 export class Overview extends Component {
     state = {
@@ -87,8 +88,8 @@ export class Overview extends Component {
                                 animate= "true"
                                 data={[
                                     { title: 'Expenses', value: this.state.overviewObj.Expense, color: 'rgb(189, 16, 51)' },
-                                    { title: 'Savings', value: this.state.overviewObj.Savings, color: 'rgb(22, 165, 22)' },
-                                    { title: 'Expendable', value: this.state.overviewObj.Income - (this.state.overviewObj.Expense + this.state.overviewObj.Savings), color: 'rgb(152, 152, 152)' },
+                                    { title: 'Savings', value: this.state.overviewObj.Savings, color: 'rgb(105, 105, 245)' },
+                                    { title: 'Expendable', value: this.state.overviewObj.Income - (this.state.overviewObj.Expense + this.state.overviewObj.Savings), color: 'rgb(75, 196, 75)' },
                                 ]}
                             />
                         </div>
@@ -119,10 +120,14 @@ export class Overview extends Component {
                     <div className="arrow selectorRight" onClick={this.handleOnNextMonthClick}>&#9658;</div>
                 </div>
                 {this.state.isLoaded ? this.renderOverview(): ""}
-                <div className="selector">
-                    <div className="selection">All Transactions</div>
-                    <div className="selection">Income</div>
-                    <div className="selection">Expenses</div>
+                <div className="filterContainer">
+                    <Link className="addButton" to='/add-expense'>+ Expense</Link>
+                    <div className="selector">
+                        <div className="selection">All Transactions</div>
+                        <div className="selection">Income</div>
+                        <div className="selection">Expenses</div>
+                    </div>
+                    <Link className="addButton" to = '/add-income'>+ Income</Link>
                 </div>
                 <div className="transactions">
                     <table>

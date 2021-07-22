@@ -5,6 +5,35 @@
     width: 100%;
 }
 
+.filterContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.addButton{
+    border-radius: 25px;
+    height: 35px;
+    width: 100px;
+    font-size: 14pt;
+    background-image:linear-gradient(rgba(215, 226, 97, 0.25), rgba(199, 85, 85, 0.6));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 2px 2px 5px gray;
+}
+
+a{
+    text-decoration: none;
+    color: white;
+}
+
+.back{
+    position: absolute;
+    left: 20px;
+    top: 100px;
+}
+
 .selector{
     width: 250px;
     height: 40px;
@@ -25,6 +54,7 @@
 }
 
 .overview{
+    color:white;
     width: 75%;
     max-width: 500px;
     height: 200px;
@@ -65,11 +95,11 @@ td{
 }
 
 .saving{
-    color:rgb(22, 165, 22)
+    color:rgb(105, 105, 245)
 }
 
 .remaining{
-    color:rgb(152, 152, 152)
+    color:rgb(75, 196, 75)
 }
 
 .chart{
@@ -82,4 +112,10 @@ td{
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
+}
+
+.inputBlock{
+    display: flex;
+    align-items: center;
+    margin: 10px;
 }
