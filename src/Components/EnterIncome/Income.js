@@ -1,7 +1,8 @@
-import React, { Component } from 'react'
-import './Income.css'
-import Axios from '../utils/Axios'
-import {toast} from 'react-toastify'
+import React, { Component } from 'react';
+import './Income.css';
+import Axios from '../utils/Axios';
+import {toast} from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 export class Income extends Component {
     state = {
@@ -52,37 +53,38 @@ export class Income extends Component {
     render() {
         return (
             <div className="main">
-        <div className= "moneySign">
-            <h3>Income</h3>
-        </div>
-        <div className="input">
-            <form onSubmit={this.handleOnSubmit}>
-                <label htmlFor="date">Date</label>
-                <input 
-                type= "date"
-                id= "date"
-                name= "date" 
-                value={`${this.state.date}`}
-                onChange={this.handleOnChange}
-                />
-                <label htmlFor="description">Description</label>
-                <input 
-                type= "text"
-                id= "description"
-                name= "description" 
-                value={this.state.description}
-                onChange={this.handleOnChange}/>
-                <label htmlFor="amount">Amount</label>
-                <input 
-                type= "text"
-                id= "amount"
-                name= "amount" 
-                value={this.state.amount}
-                onChange={this.handleOnChange}/>
-                <button className="submit">Enter Income</button>
-            </form>
-        </div>
-    </div>
+                <Link className="addButton back" to="/overview">Back</Link>
+                <div className= "moneySign">
+                    <h3>Income</h3>
+                </div>
+                <div className="input">
+                    <form onSubmit={this.handleOnSubmit}>
+                        <label htmlFor="date">Date</label>
+                        <input 
+                        type= "date"
+                        id= "date"
+                        name= "date" 
+                        value={`${this.state.date}`}
+                        onChange={this.handleOnChange}
+                        />
+                        <label htmlFor="description">Description</label>
+                        <input 
+                        type= "text"
+                        id= "description"
+                        name= "description" 
+                        value={this.state.description}
+                        onChange={this.handleOnChange}/>
+                        <label htmlFor="amount">Amount</label>
+                        <input 
+                        type= "text"
+                        id= "amount"
+                        name= "amount" 
+                        value={this.state.amount}
+                        onChange={this.handleOnChange}/>
+                        <button className="submit">Enter Income</button>
+                    </form>
+                </div>
+            </div>
         )
     }
 }
