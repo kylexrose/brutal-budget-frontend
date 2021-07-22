@@ -18,7 +18,7 @@ export class Login extends Component {
   componentDidMount() {
     let isAuth = checkIfUserIsAuth();
     if (isAuth) {
-      this.props.history.push("/");
+      this.props.history.push("/overview");
     }
   }
 
@@ -53,7 +53,7 @@ export class Login extends Component {
             draggable: true,
             progress: undefined,
         })
-        this.props.history.push("/");
+        this.props.history.push("/overview");
     }catch(e){
       console.log(e)
       if(e.response.status === 400){

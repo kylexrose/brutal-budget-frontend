@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './Overview.css';
 import Axios from '../utils/Axios';
+import {PieChart} from 'react-minimal-pie-chart';
 
 export class Overview extends Component {
     state = {
@@ -8,10 +9,12 @@ export class Overview extends Component {
         currentMonthIndex: 6,
         currentYear: 2021,
         transactionList:[],
+        overviewObj: {},
+        isLoaded: false,
     }
 
-    componentDidMount() {
-        this.handleGetTransactionsByMonth();
+    async componentDidMount() {
+            await this.handleGetTransactionsByMonth();
     }
 
     async componentDidUpdate (prevProps, previousState) {
@@ -19,9 +22,9 @@ export class Overview extends Component {
             if(previousState.currentMonthIndex !== this.state.currentMonthIndex){
                 await this.handleGetTransactionsByMonth();
         }
-    }catch(e){
-        console.log(e)
-    }
+        }catch(e){
+            console.log(e)
+        }
     }
     
     handleOnNextMonthClick = () =>{
@@ -46,7 +49,13 @@ export class Overview extends Component {
         try{
             const monthlyTransactions = await Axios.get(`/api/transactions/get-transactions-by-month/${this.state.currentYear}/${this.state.currentMonthIndex + 1}`)
             this.setState({
-                transactionList : monthlyTransactions.data.transactions,
+                transactionList : monthlyTransactions.data.payload.transactions,
+                overviewObj: monthlyTransactions.data.sumObj,
+            }, ()=>{
+                console.log(this.state.overviewObj)
+                this.setState({
+                    isLoaded: true,
+                })
             })
         }catch(e){
             console.log(e)
@@ -56,15 +65,48 @@ export class Overview extends Component {
     renderTransactionList = () =>{
         return(
         this.state.transactionList.map(item => {
+            const className = item.type === "Expense" ? "neg" : "";
             return(
                 <tr key={item._id}>
                     <td>{`${item.date.year} / ${item.date.month} / ${item.date.day}`}</td>
-                    <td>{item.category}</td>
+                    <td>{item.type === "Income" ? item.type : item.category}</td>
                     <td>{item.description}</td>
-                    <td>{item.amount}</td>
+                    <td className={className}>{item.type !== "Income" ? `-${item.amount}` : item.amount}</td>
                 </tr>
             )
         })
+        )
+    }
+
+    renderOverview = () =>{
+        
+        return(
+            <div className= "overview">
+                <div className="chart">
+                            <PieChart
+                                animate= "true"
+                                data={[
+                                    { title: 'Expenses', value: this.state.overviewObj.Expense, color: 'rgb(189, 16, 51)' },
+                                    { title: 'Savings', value: this.state.overviewObj.Savings, color: 'rgb(22, 165, 22)' },
+                                    { title: 'Expendable', value: this.state.overviewObj.Income - (this.state.overviewObj.Expense + this.state.overviewObj.Savings), color: 'rgb(152, 152, 152)' },
+                                ]}
+                            />
+                        </div>
+                        <div className="overviewTable">
+                            <div>
+                                <h2>
+                                    Income:  {this.state.overviewObj.Income}<br/>
+                                    Savings:  <span className="saving">{this.state.overviewObj.Savings}</span><br/>
+                                    Expenses:  <span className="neg">{this.state.overviewObj.Expense}</span>
+                                </h2>
+                            </div>
+                            <div className="keys">
+                                <div><span className="neg">Expenses</span></div>
+                                <div><span className="saving">Savings</span></div>
+                                <div><span className="remaining">Remaining</span></div>
+                            </div>
+                        </div>
+                    </div>
         )
     }
 
@@ -76,9 +118,7 @@ export class Overview extends Component {
                     <div className="selectorCenter">{this.state.months[this.state.currentMonthIndex]}</div>
                     <div className="arrow selectorRight" onClick={this.handleOnNextMonthClick}>&#9658;</div>
                 </div>
-                <div className= "overview">
-
-                </div>
+                {this.state.isLoaded ? this.renderOverview(): ""}
                 <div className="selector">
                     <div className="selection">All Transactions</div>
                     <div className="selection">Income</div>

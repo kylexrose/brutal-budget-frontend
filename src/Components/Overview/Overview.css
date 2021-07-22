@@ -31,7 +31,8 @@
     background-color: #2d6072;
     border-radius: 10px;
     box-shadow: 2px 2px 5px gray;
-
+    display: flex;
+    align-items: center;
 }
 
 .transactions{
@@ -57,4 +58,28 @@ td{
 
 .arrow{
     cursor: pointer;
+}
+
+.neg{
+    color:rgb(189, 16, 51)
+}
+
+.saving{
+    color:rgb(22, 165, 22)
+}
+
+.remaining{
+    color:rgb(152, 152, 152)
+}
+
+.chart{
+    height: 170px;
+    
+}
+
+.keys{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
 }

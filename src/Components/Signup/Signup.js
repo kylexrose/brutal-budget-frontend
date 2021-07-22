@@ -35,7 +35,7 @@
     componentDidMount() {
         let isAuth = checkIfUserIsAuth();
         if (isAuth) {
-          this.props.history.push("/");
+          this.props.history.push("/overview");
         }
     }
   
@@ -201,8 +201,7 @@
           username: this.state.username,
           password: this.state.password,
         }
-        let success = await Axios.post('/api/users/signup', userInputObj);
-        console.log(success)
+        await Axios.post('/api/users/signup', userInputObj);
       }catch(e){
         console.log(e.response)
         toast.error(`${e.response.data.message}`, {

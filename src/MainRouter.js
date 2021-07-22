@@ -6,6 +6,7 @@ import Nav from './Components/Nav/Nav';
 import Overview from './Components/Overview/Overview';
 import PrivateRoute from './Components/PrivateRoute/PrivateRoute'
 import Income from './Components/EnterIncome/Income';
+import Expense from './Components/EnterExpense/Expense';
 
 const MainRouter = (props) => {
     return(
@@ -29,6 +30,11 @@ const MainRouter = (props) => {
                 exact
                 path="/add-income" 
                 component={Income}
+                user={props.user}/>
+                <PrivateRoute 
+                exact
+                path="/add-expense" 
+                component={Expense}
                 user={props.user}/>
             </>
         </Router>
