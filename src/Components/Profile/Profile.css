@@ -1,0 +1,30 @@
+.profileContainer{
+    border-radius: 20px;
+    width: 400px;
+    background-image:linear-gradient(rgba(245, 245, 245, .25), rgba(245, 245, 245, .6));
+    box-shadow: 2px 2px 5px gray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+}
+
+.body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 50px;
+}
+
+.label{
+    font-weight: bolder;
+}
+
+.button{
+    background-color: #558fa6;
+    border-radius: 15px;
+    box-shadow: 2px 2px 5px gray;
+    padding: 2px;
+    height: 10px;
+    cursor: pointer;
+}
