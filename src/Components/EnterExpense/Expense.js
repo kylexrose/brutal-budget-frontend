@@ -72,8 +72,13 @@ export class Expense extends Component {
     handleSaveCategory = async (event) =>{
         event.preventDefault();
         try{
-            await Axios.post('/create-new-category', {name: this.state.newCategory});
+            const newCategory = await Axios.post('/api/categories/create-new-category', {name: this.state.newCategory});
             await this.getAllCategories();
+            this.setState({
+                newCategoryToggle: false,
+                category: newCategory.data.name,
+            })
+            document.querySelector("#category").value = newCategory.data.name;
         }catch(e){
             console.log(e)
         }
