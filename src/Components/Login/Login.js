@@ -68,7 +68,7 @@ export class Login extends Component {
             draggable: true,
             progress: undefined,
     })
-}else{
+    }else{
     toast.error(`Too many requests being made`, {
         position: "top-center",
         autoClose: 5000,

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './Nav.css';
 import logo from "../../local/budgetLogo.png"
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import menu from '../../local/menuIcon.png'
 
 export class Nav extends Component {
@@ -11,10 +11,10 @@ export class Nav extends Component {
                 <div className="menuIcon">
                     <img src={menu} alt=""/>
                 </div>
-                <div className="logoContainer">
+                <Link to="/overview" className="logoContainer">
                     <img src={logo} alt="logo"/>
                     <p>Brutal Budget.</p>
-                </div>
+                </Link>
                 <div className="right-side-nav">
                     <ul>
                         <li>

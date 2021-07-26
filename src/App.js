@@ -17,7 +17,6 @@ export class App extends Component {
           email: currentUser.email,
         }
       })}
-    console.log(this.state.user)
   }
 
   handleUserLogin = (user) =>{
