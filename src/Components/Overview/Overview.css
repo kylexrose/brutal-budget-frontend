@@ -63,6 +63,7 @@ a{
     box-shadow: 2px 2px 5px gray;
     display: flex;
     align-items: center;
+    justify-content: space-evenly;
 }
 
 .transactions{

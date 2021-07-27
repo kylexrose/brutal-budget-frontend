@@ -1,7 +1,7 @@
   import React, { Component } from "react";
   import { ToastContainer, toast } from "react-toastify";
   import 'react-toastify/dist/ReactToastify.css';
-  import { isAlpha, isEmail, isAlphanumeric, isStrongPassword, isNumeric } from "validator";
+  import { isAlpha, isEmail, isAlphanumeric, isStrongPassword } from "validator";
   import Axios from "../utils/Axios";
   import "./Signup.css";
   import checkIfUserIsAuth from "../utils/checkIfUserIsAuth";
@@ -12,14 +12,12 @@
       lastName: "",
       username: "",
       email: "",
-      mobileNumber: "",
       password: "",
       confirmPassword: "",
       firstNameError: "",
       lastNameError: "",
       usernameError: "",
       emailError: "",
-      mobileNumberError: "",
       passwordError: "",
       confirmPasswordError: "",
       isButtonDisabled: true,
@@ -53,9 +51,6 @@
           }
           if (event.target.name === "email") {
             this.handleEmailInput();
-          }
-          if(event.target.name === "mobileNumber"){
-            this.handleMobileNumberInput();
           }
           if (event.target.name === "username") {
             this.handleUsernameInput();
@@ -133,25 +128,6 @@
         }
       }
     };
-    handleMobileNumberInput = (event) =>{
-      if (this.state.mobileNumber.length === 0) {
-        this.setState({
-          emailError: "Mobile number cannot be empty",
-          isButtonDisabled: true,
-        });
-      } else {
-        if (isNumeric(this.state.mobileNumber) && this.state.mobileNumber.length === 10) {
-          this.setState({
-            mobileNumberError: "",
-          });
-        } else {
-          this.setState({
-            emailError: "Please, enter a phone number containing only 10 numeric digits!",
-            isButtonDisabled: true,
-          });
-        }
-      }
-    }
     handleFirstNameAndLastNameInput = (event) => {
       if (this.state[event.target.name].length > 0) {
         if (isAlpha(this.state[event.target.name])) {
@@ -197,7 +173,6 @@
           firstName: this.state.firstName,
           lastName: this.state.lastName,
           email: this.state.email,
-          mobileNumber: this.state.mobileNumber,
           username: this.state.username,
           password: this.state.password,
         }
@@ -259,7 +234,7 @@
       }
     };
   render() {
-    const {firstNameError, lastNameError, emailError, usernameError, passwordError, confirmPasswordError, mobileNumberError} = this.state;
+    const {firstNameError, lastNameError, emailError, usernameError, passwordError, confirmPasswordError,} = this.state;
     return (
       <div className="container">
         <div className="form-text">Sign-up</div>
@@ -310,16 +285,6 @@
                   onChange={this.handleOnChange}
                 />
                 <div className="errorMessage">{confirmPasswordError}</div>
-            </div>
-            <div className="block-container">
-              <input
-                  type="mobileNumber"
-                  id="mobileNumber"
-                  placeholder="Mobile Number"
-                  name="mobileNumber"
-                  onChange={this.handleOnChange}
-              />
-              <div className="errorMessage">{mobileNumberError}</div>
             </div>
             <div className="block-container">
               <input

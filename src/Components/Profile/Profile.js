@@ -1,31 +1,30 @@
 import React, { Component } from 'react';
 import Axios from "../utils/Axios";
 import './Profile.css';
+import {isEmail} from 'validator';
+import {toast} from 'react-toastify';
+import Confirmation from '../Confirmation/Confirmation';
 
 export class Profile extends Component {
     state = {
         userData : {},
-        nameToggle: false,
-        mobileNumberToggle: false,
         emailToggle: false,
-        firstName:"",
-        lastName:"",
         email: "",
-        mobileNumber: "",
+        confirmToggle: false,
     }
 
-    async componentDidMount(){
+    componentDidMount(){
+        this.retrieveUserData()
+    }
+
+    retrieveUserData = async () =>{
         try{
             const userData = await Axios.get(`/api/users/get-user-data`);
-            console.log(userData)
             this.setState({
                 userData: userData.data.payload,
             }, () =>{
                 this.setState({
-                    firstName: this.state.userData.firstName,
-                    lastName : this.state.userData.lastName,
                     email : this.state.userData.email,
-                    mobileNumber: this.state.userData.mobileNumber,
                 })
             })
         }catch(e){
@@ -34,10 +33,23 @@ export class Profile extends Component {
     }
 
     handleEditClick = (event) =>{
-        console.log(this.state.nameToggle)
         this.setState({
-            [`${event.target.id}Toggle`] : true,
+            [event.target.id] : !this.state[event.target.id],
         })
+    }
+
+    handleSaveClick = async () =>{
+        if(isEmail(this.state.email)){
+            document.querySelector('#email').disabled = true;
+            this.setState({
+                confirmToggle: true,
+            })
+        }else{
+            toast.error(`Email must be valid`);
+            this.setState({
+                emailToggle: false,
+            })
+        }
     }
 
     handleOnChange = (event)=>{
@@ -46,50 +58,44 @@ export class Profile extends Component {
         })
     }
 
+    handleSubmitPassword = async(password)=>{
+        try{
+            const updatedProfile = await Axios.put('/api/users/update-profile', {email: this.state.email, password: password});
+            console.log(updatedProfile)
+            this.setState({
+                email: updatedProfile.email,
+                confirmToggle: false,
+                emailToggle: false,
+            })
+
+        }catch(e){
+            console.log(e)
+        }
+    }
+
     render() {
         return (
             <div className="body">
+                {this.state.confirmToggle ? <Confirmation handleSubmitPassword={this.handleSubmitPassword}/> : ""}
                 <div className="profileContainer">
                 <table>
-                    <tbody>           
-                        {this.state.toggleName ? 
-                        <tr className="inputBlock">
-                            <td className="label">Name</td>
-                            <td>{this.state.firstName} {this.state.lastName}</td>
-                            <td className="button" id="name" onClick={this.handleEditClick}>Edit</td>
-                        </tr>: 
-                        <tr className="inputBlock">
-                            <td className="label">Name</td>
-                            <td><input
-                            type="text"
-                            id= "firstName"
-                            value= {this.state.firstName}
-                            onChange={this.handleOnChange}/>
-                            <input
-                            type="text"
-                            id= "lastName"
-                            value= {this.state.lastName}
-                            onChange={this.handleOnChange}/></td>
-                            <td className="button" id="name" onClick={this.handleSaveClick}>Save</td>
-                        </tr>}  
-                        
+                    <tbody>
                         <tr className="inputBlock">
                             <td className="label">Username</td>
                             <td> {this.state.userData.username}</td>
+                            <td className="button">Reset Password</td>
                         </tr>
+                        {!this.state.emailToggle ? 
                         <tr className="inputBlock">
                             <td className="label">Email</td>
                             <td> {this.state.email}</td>
-                            <td className="button">Change Email</td>
-                        </tr>
+                            <td className="button" id="emailToggle" onClick={this.handleEditClick}>Change Email</td>
+                        </tr> :
                         <tr className="inputBlock">
-                            <td className="label">Mobile Number</td>
-                            <td> {this.state.mobileNumber}</td>
-                            <td className="button">Change Mobile</td>
-                        </tr>
-                        <tr className="inputBlock">
-                            <td className="button">Reset Password</td>
-                        </tr>
+                            <td className="label">Email</td>
+                            <td><input type= "text" id="email" value= {this.state.email} onChange={this.handleOnChange}/></td>
+                            <td className="button" onClick={this.handleSaveClick}>Save</td>
+                        </tr>}
                     </tbody>
                 </table>
             </div>

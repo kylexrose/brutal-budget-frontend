@@ -1,6 +1,5 @@
 .profileContainer{
     border-radius: 20px;
-    width: 400px;
     background-image:linear-gradient(rgba(245, 245, 245, .25), rgba(245, 245, 245, .6));
     box-shadow: 2px 2px 5px gray;
     display: flex;
@@ -25,6 +24,12 @@
     border-radius: 15px;
     box-shadow: 2px 2px 5px gray;
     padding: 2px;
-    height: 10px;
+    height: auto;
+    width: 100px;
     cursor: pointer;
+}
+
+.inputBlock{
+    display: flex;
+    justify-content: space-evenly;
 }

@@ -84,15 +84,15 @@ export class Overview extends Component {
         return(
             <div className= "overview">
                 <div className="chart">
-                            <PieChart
-                                animate= "true"
-                                data={[
-                                    { title: 'Expenses', value: this.state.overviewObj.Expense, color: 'rgb(189, 16, 51)' },
-                                    { title: 'Savings', value: this.state.overviewObj.Savings, color: 'rgb(105, 105, 245)' },
-                                    { title: 'Expendable', value: this.state.overviewObj.Income - (this.state.overviewObj.Expense + this.state.overviewObj.Savings), color: 'rgb(75, 196, 75)' },
-                                ]}
-                            />
-                        </div>
+                    <PieChart
+                        animate= "true"
+                        data={[
+                            { title: 'Expenses', value: this.state.overviewObj.Expense, color: 'rgb(189, 16, 51)' },
+                            { title: 'Savings', value: this.state.overviewObj.Savings, color: 'rgb(105, 105, 245)' },
+                            { title: 'Expendable', value: this.state.overviewObj.Income - (this.state.overviewObj.Expense + this.state.overviewObj.Savings), color: 'rgb(75, 196, 75)' },
+                        ]}
+                    />
+                </div>
                         <div className="overviewTable">
                             <div>
                                 <h2>
