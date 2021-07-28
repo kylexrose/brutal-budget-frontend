@@ -2141,14 +2141,12 @@ class Signup extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
       lastName: "",
       username: "",
       email: "",
-      mobileNumber: "",
       password: "",
       confirmPassword: "",
       firstNameError: "",
       lastNameError: "",
       usernameError: "",
       emailError: "",
-      mobileNumberError: "",
       passwordError: "",
       confirmPasswordError: "",
       isButtonDisabled: true,
@@ -2171,10 +2169,6 @@ class Signup extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
 
         if (event.target.name === "email") {
           this.handleEmailInput();
-        }
-
-        if (event.target.name === "mobileNumber") {
-          this.handleMobileNumberInput();
         }
 
         if (event.target.name === "username") {
@@ -2257,26 +2251,6 @@ class Signup extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
       }
     };
 
-    this.handleMobileNumberInput = event => {
-      if (this.state.mobileNumber.length === 0) {
-        this.setState({
-          emailError: "Mobile number cannot be empty",
-          isButtonDisabled: true
-        });
-      } else {
-        if (Object(validator__WEBPACK_IMPORTED_MODULE_3__["isNumeric"])(this.state.mobileNumber) && this.state.mobileNumber.length === 10) {
-          this.setState({
-            mobileNumberError: ""
-          });
-        } else {
-          this.setState({
-            emailError: "Please, enter a phone number containing only 10 numeric digits!",
-            isButtonDisabled: true
-          });
-        }
-      }
-    };
-
     this.handleFirstNameAndLastNameInput = event => {
       if (this.state[event.target.name].length > 0) {
         if (Object(validator__WEBPACK_IMPORTED_MODULE_3__["isAlpha"])(this.state[event.target.name])) {
@@ -2325,7 +2299,6 @@ class Signup extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
           firstName: this.state.firstName,
           lastName: this.state.lastName,
           email: this.state.email,
-          mobileNumber: this.state.mobileNumber,
           username: this.state.username,
           password: this.state.password
         };
@@ -2392,7 +2365,6 @@ class Signup extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
       usernameError,
       passwordError,
       confirmPasswordError,
-      mobileNumberError
     } = this.state;
     return /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_7__["jsxDEV"])("div", {
       className: "container",

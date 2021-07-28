@@ -7,6 +7,9 @@ import Overview from './Components/Overview/Overview';
 import PrivateRoute from './Components/PrivateRoute/PrivateRoute'
 import Income from './Components/EnterIncome/Income';
 import Expense from './Components/EnterExpense/Expense';
+import Profile from './Components/Profile/Profile';
+import PasswordReset from './Components/PasswordReset/PasswordReset';
+import Expired from './Components/Expired';
 
 const MainRouter = (props) => {
     return(
@@ -36,6 +39,19 @@ const MainRouter = (props) => {
                 path="/add-expense" 
                 component={Expense}
                 user={props.user}/>
+                <PrivateRoute 
+                exact
+                path="/profile" 
+                component={Profile}
+                user={props.user}/>
+                <Route 
+                    exact 
+                    path="/reset-password" 
+                    render={(routerProps) =>(
+                        <PasswordReset {...routerProps}/>
+                    )}
+                />
+                <Route component={Expired} exact path="/expired"/>
             </>
         </Router>
     )

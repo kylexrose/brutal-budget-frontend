@@ -4,6 +4,7 @@ import './Profile.css';
 import {isEmail} from 'validator';
 import {toast} from 'react-toastify';
 import Confirmation from '../Confirmation/Confirmation';
+import { Link } from 'react-router-dom';
 
 export class Profile extends Component {
     state = {
@@ -61,9 +62,9 @@ export class Profile extends Component {
     handleSubmitPassword = async(password)=>{
         try{
             const updatedProfile = await Axios.put('/api/users/update-profile', {email: this.state.email, password: password});
-            console.log(updatedProfile)
+            console.log(updatedProfile.data.payload.email)
             this.setState({
-                email: updatedProfile.email,
+                email: updatedProfile.data.payload.email,
                 confirmToggle: false,
                 emailToggle: false,
             })
@@ -73,9 +74,23 @@ export class Profile extends Component {
         }
     }
 
+    handleResetClick = async ()=>{
+        try{
+            await Axios.post("/api/mailjet/reset-password", {
+                firstName: this.state.userData.firstName, 
+                lastName: this.state.userData.lastName,
+                email : this.state.userData.email,
+            });
+            toast.success('Password Reset Link has been sent.')
+        }catch(e){
+            console.log(e)
+        }
+    }
+
     render() {
         return (
             <div className="body">
+                <Link className="addButton back" to="/overview">Back</Link>
                 {this.state.confirmToggle ? <Confirmation handleSubmitPassword={this.handleSubmitPassword}/> : ""}
                 <div className="profileContainer">
                 <table>
@@ -83,7 +98,7 @@ export class Profile extends Component {
                         <tr className="inputBlock">
                             <td className="label">Username</td>
                             <td> {this.state.userData.username}</td>
-                            <td className="button">Reset Password</td>
+                            <td className="button" onClick={this.handleResetClick}>Reset Password</td>
                         </tr>
                         {!this.state.emailToggle ? 
                         <tr className="inputBlock">

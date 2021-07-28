@@ -120,3 +120,12 @@ td{
     align-items: center;
     margin: 10px;
 }
+
+.sorting{
+    background-color: #2d6072;
+    color: white
+}
+
+.selection{
+    cursor: pointer;
+}

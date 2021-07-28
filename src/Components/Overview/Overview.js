@@ -12,6 +12,8 @@ export class Overview extends Component {
         transactionList:[],
         overviewObj: {},
         isLoaded: false,
+        sorting: "allTransactions",
+        sorted: ["Income", "Expense"],
     }
 
     async componentDidMount() {
@@ -48,7 +50,9 @@ export class Overview extends Component {
 
     handleGetTransactionsByMonth = async() =>{
         try{
-            const monthlyTransactions = await Axios.get(`/api/transactions/get-transactions-by-month/${this.state.currentYear}/${this.state.currentMonthIndex + 1}`)
+            const monthlyTransactions = await Axios.post(
+                `/api/transactions/get-transactions-by-month/${this.state.currentYear}/${this.state.currentMonthIndex + 1}`, 
+                {sorted: this.state.sorted})
             this.setState({
                 transactionList : monthlyTransactions.data.payload.transactions,
                 overviewObj: monthlyTransactions.data.sumObj,
@@ -80,7 +84,13 @@ export class Overview extends Component {
     }
 
     renderOverview = () =>{
-        
+        if(this.state.transactionList.length === 0){
+            return (
+                <div className= "overview">
+                    <h3>No transaction data found.</h3>
+                </div>
+            )
+        }
         return(
             <div className= "overview">
                 <div className="chart">
@@ -93,22 +103,34 @@ export class Overview extends Component {
                         ]}
                     />
                 </div>
-                        <div className="overviewTable">
-                            <div>
-                                <h2>
-                                    Income:  {this.state.overviewObj.Income}<br/>
-                                    Savings:  <span className="saving">{this.state.overviewObj.Savings}</span><br/>
-                                    Expenses:  <span className="neg">{this.state.overviewObj.Expense}</span>
-                                </h2>
-                            </div>
-                            <div className="keys">
-                                <div><span className="neg">Expenses</span></div>
-                                <div><span className="saving">Savings</span></div>
-                                <div><span className="remaining">Remaining</span></div>
-                            </div>
-                        </div>
+                <div className="overviewTable">
+                    <div>
+                        <h2>
+                            Income:  {this.state.overviewObj.Income}<br/>
+                            Savings:  <span className="saving">{this.state.overviewObj.Savings}</span><br/>
+                            Expenses:  <span className="neg">{this.state.overviewObj.Expense}</span>
+                        </h2>
                     </div>
+                    <div className="keys">
+                        <div><span className="neg">Expenses</span></div>
+                        <div><span className="saving">Savings</span></div>
+                        <div><span className="remaining">Remaining</span></div>
+                    </div>
+                </div>
+            </div>
         )
+    }
+
+    handleSortClick = (event)=>{
+        document.querySelector(`#${this.state.sorting}`).classList.remove("sorting");
+        this.setState({
+            sorting: event.target.id,
+            sorted: event.target.id === "allTransactions" ? ["Income", "Expense"] : [event.target.id]
+        }, () =>{
+            console.log(this.state.sorted)
+            document.querySelector(`#${this.state.sorting}`).classList.add("sorting");
+            this.handleGetTransactionsByMonth();
+        })
     }
 
     render() {
@@ -123,9 +145,9 @@ export class Overview extends Component {
                 <div className="filterContainer">
                     <Link className="addButton" to='/add-expense'>+ Expense</Link>
                     <div className="selector">
-                        <div className="selection">All Transactions</div>
-                        <div className="selection">Income</div>
-                        <div className="selection">Expenses</div>
+                        <div className="selection" id="allTransactions" onClick={this.handleSortClick}>All Transactions</div>
+                        <div className="selection" id="Income" onClick={this.handleSortClick}>Income</div>
+                        <div className="selection" id="Expense" onClick={this.handleSortClick}>Expenses</div>
                     </div>
                     <Link className="addButton" to = '/add-income'>+ Income</Link>
                 </div>

@@ -4,6 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import React, {Component} from 'react'
 import jwtDecode from 'jwt-decode';
 import setAxiosAuthToken from './Components/utils/setAxiosAuthToken';
+require('dotenv').config()
 
 export class App extends Component {
   state = {
