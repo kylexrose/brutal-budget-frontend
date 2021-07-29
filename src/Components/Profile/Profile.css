@@ -33,3 +33,32 @@
     display: flex;
     justify-content: space-evenly;
 }
+
+.listContainer{
+    margin: 50px;
+    background-image:linear-gradient(rgba(245, 245, 245, .25), rgba(245, 245, 245, .6));
+    box-shadow: 2px 2px 5px gray;
+    border-radius: 15px;
+    padding: 30px
+}
+
+.categoryButton{
+    border-radius: 15px;
+    box-shadow: 2px 2px 5px gray;
+    padding: 2px;
+    height: 10px;
+    width: 100px;
+    cursor: pointer;
+}
+
+.editButton{
+    background-color: #558fa6;
+}
+
+.saveButton{
+    background-color: #2d6072;
+}
+
+.deleteButton{
+    background-color: #f2b8a3;
+}

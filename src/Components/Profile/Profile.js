@@ -5,6 +5,7 @@ import {isEmail} from 'validator';
 import {toast} from 'react-toastify';
 import Confirmation from '../Confirmation/Confirmation';
 import { Link } from 'react-router-dom';
+import CategoryList from '../CategoryList/CategoryList';
 
 export class Profile extends Component {
     state = {
@@ -114,6 +115,7 @@ export class Profile extends Component {
                     </tbody>
                 </table>
             </div>
+            <CategoryList/>
             </div>
             
         )
