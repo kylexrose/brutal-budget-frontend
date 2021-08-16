@@ -32,7 +32,7 @@ export class CategoryList extends Component {
     render() {
         return (
             <div className="listContainer">
-                <h2>User Catagories</h2>
+                <h2>User Categories</h2>
                 <table>
                     <tbody>
                         

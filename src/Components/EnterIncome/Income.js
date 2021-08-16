@@ -9,12 +9,13 @@ export class Income extends Component {
         date: "",
         description: "",
         amount: "",
+        amountError: "", 
     }
 
     componentDidMount() {
         this.setState({
             date: JSON.stringify(new Date(Date.now())).slice(1, 11)
-        }) 
+        })
     }
     
     handleOnChange = (event) =>{
@@ -25,7 +26,8 @@ export class Income extends Component {
 
     handleOnSubmit = async (event) =>{
         event.preventDefault();
-        try{
+        if(!this.state.amountError){
+            try{
             const convDate = this.state.date.split("-");
             const dateObj = {
                 year: +convDate[0],
@@ -45,9 +47,11 @@ export class Income extends Component {
                 amount: ""
             })
             toast.success(`Income Added`)
-        }catch(e){
-            console.log(e)
+            }catch(e){
+                console.log(e)
+            }
         }
+        
     }
     
     render() {

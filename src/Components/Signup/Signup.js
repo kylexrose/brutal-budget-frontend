@@ -103,7 +103,7 @@
         } else {
           this.setState({
             passwordError:
-              "Password must contains 1 uppercase, 1 lowercase, 1 special character, 1 number and minimul of 8 charactors long",
+              "Password must contains 1 uppercase, 1 lowercase, 1 special character, 1 number and minimum of 8 characters long",
             isButtonDisabled: true,
           });
         }
@@ -177,6 +177,7 @@
           password: this.state.password,
         }
         await Axios.post('/api/users/signup', userInputObj);
+        toast.success("User successfully created")
       }catch(e){
         console.log(e.response)
         toast.error(`${e.response.data.message}`, {
