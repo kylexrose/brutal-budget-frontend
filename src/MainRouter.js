@@ -9,7 +9,7 @@ import Income from './Components/EnterIncome/Income';
 import Expense from './Components/EnterExpense/Expense';
 import Profile from './Components/Profile/Profile';
 import PasswordReset from './Components/PasswordReset/PasswordReset';
-import Expired from './Components/Expired';
+import Expired from './Components/PasswordReset/Expired';
 
 const MainRouter = (props) => {
     return(
