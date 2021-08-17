@@ -1,75 +1,75 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import './Overview.css';
 import Axios from '../utils/Axios';
 import {PieChart} from 'react-minimal-pie-chart';
 import { Link } from 'react-router-dom';
 
-export class Overview extends Component {
-    state = {
-        months : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-        currentMonthIndex: 6,
-        currentYear: 2021,
-        transactionList:[],
-        overviewObj: {},
-        isLoaded: false,
-        sorting: "allTransactions",
-        sorted: ["Income", "Expense"],
-    }
-
-    async componentDidMount() {
-            await this.handleGetTransactionsByMonth();
-    }
-
-    async componentDidUpdate (prevProps, previousState) {
-        try{
-            if(previousState.currentMonthIndex !== this.state.currentMonthIndex){
-                await this.handleGetTransactionsByMonth();
-        }
-        }catch(e){
-            console.log(e)
-        }
-    }
+function Overview () {
     
-    handleOnNextMonthClick = () =>{
-        this.setState({
-            currentYear: this.state.currentMonthIndex === 11 ? this.state.currentYear + 1 : this.state.currentYear,
-            currentMonthIndex: this.state.currentMonthIndex === 11 ? 0 : this.state.currentMonthIndex + 1,
-        }, () => {
-            this.handleGetTransactionsByMonth()
-        })
+    const [months, ] = useState(["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"])
+    const [currentMonthIndex, setCurrentMonthIndex] = useState(6);
+    const [currentYear, setCurrentYear] = useState(2021);
+    const [transactionList, setTransactionList] = useState([]);
+    const [overviewObj, setOverviewObj] = useState({});
+    const [sorting, setSorting] = useState("allTransactions");
+    const [sorted, setSorted] = useState(["Income", "Expense"]);
+    const [isLoaded, setIsLoaded] = useState(false)
+
+    useEffect(() => {
+        handleGetTransactionsByMonth();
+    }, [])
+
+    useEffect(() => {
+        async function updateMonth (){
+            try{
+                await handleGetTransactionsByMonth();
+            }catch(e){
+                console.log(e)
+        }}
+        updateMonth();
+    }, [currentMonthIndex])
+
+    useEffect(() => {
+        console.log(Object.keys(overviewObj))
+        if(Object.keys(overviewObj).length !== 0){
+            setIsLoaded(true);
+        }else{
+            setIsLoaded(false)
+        }
+        
+    }, [overviewObj])
+
+    useEffect(() => {
+        document.querySelector(`#${sorting}`).classList.add("sorting");
+        handleGetTransactionsByMonth();
+    }, [sorted])
+    
+    function handleOnNextMonthClick() {
+        setCurrentYear(currentMonthIndex === 11 ? currentYear + 1 : currentYear)
+        setCurrentMonthIndex(currentMonthIndex === 11 ? 0 : currentMonthIndex + 1)
     }
 
-    handleOnPrevMonthClick = () =>{
-        this.setState({
-            currentYear: this.state.currentMonthIndex === 0 ? this.currentYear - 1 : this.state.currentYear,
-            currentMonthIndex: this.state.currentMonthIndex === 0 ? 11 : this.state.currentMonthIndex - 1,
-        }, () =>{
-            this.handleGetTransactionsByMonth()
-        })
+    function handleOnPrevMonthClick() {
+        setCurrentYear(currentMonthIndex === 0 ? currentYear - 1 : currentYear);
+        setCurrentMonthIndex(currentMonthIndex === 0 ? 11 : currentMonthIndex - 1);
     }
 
-    handleGetTransactionsByMonth = async() =>{
+    async function handleGetTransactionsByMonth() {
         try{
             const monthlyTransactions = await Axios.post(
-                `/api/transactions/get-transactions-by-month/${this.state.currentYear}/${this.state.currentMonthIndex + 1}`, 
-                {sorted: this.state.sorted})
-            this.setState({
-                transactionList : monthlyTransactions.data.payload.transactions,
-                overviewObj: monthlyTransactions.data.sumObj,
-            }, ()=>{
-                console.log(this.state.overviewObj)
-                this.setState({
-                    isLoaded: true,
-                })
-            })
+                `/api/transactions/get-transactions-by-month/${currentYear}/${currentMonthIndex + 1}`, 
+                {sorted: sorted})
+            setTransactionList( monthlyTransactions.data.payload.transactions )
+            setOverviewObj(monthlyTransactions.data.sumObj)
+            console.log(monthlyTransactions)
         }catch(e){
             console.log(e)
         }
     }
 
-    renderTransactionList = () =>{
+    async function renderTransactionList() {
         return(
-        this.state.transactionList.map(item => {
+        transactionList.map(item => {
             const className = item.type === "Expense" ? "neg" : "";
             return(
                 <tr key={item._id}>
@@ -83,32 +83,34 @@ export class Overview extends Component {
         )
     }
 
-    renderOverview = () =>{
-        if(this.state.transactionList.length === 0){
+    function renderOverview() {
+        console.log(overviewObj)
+        if(transactionList.length === 0){
             return (
                 <div className= "overview">
                     <h3>No transaction data found.</h3>
                 </div>
             )
         }
+
         return(
             <div className= "overview">
                 <div className="chart">
                     <PieChart
                         animate= "true"
                         data={[
-                            { title: 'Expenses', value: this.state.overviewObj.Expense, color: 'rgb(189, 16, 51)' },
-                            { title: 'Savings', value: this.state.overviewObj.Savings, color: 'rgb(105, 105, 245)' },
-                            { title: 'Expendable', value: this.state.overviewObj.Income - (this.state.overviewObj.Expense + this.state.overviewObj.Savings), color: 'rgb(75, 196, 75)' },
+                            { title: 'Expenses', value: overviewObj.Expense, color: 'rgb(189, 16, 51)' },
+                            { title: 'Savings', value: overviewObj.Savings, color: 'rgb(105, 105, 245)' },
+                            { title: 'Expendable', value: overviewObj.Income - (overviewObj.Expense + overviewObj.Savings), color: 'rgb(75, 196, 75)' },
                         ]}
                     />
                 </div>
                 <div className="overviewTable">
                     <div>
                         <h2>
-                            Income:  {this.state.overviewObj.Income}<br/>
-                            Savings:  <span className="saving">{this.state.overviewObj.Savings}</span><br/>
-                            Expenses:  <span className="neg">{this.state.overviewObj.Expense}</span>
+                            Income:  {overviewObj.Income}<br/>
+                            Savings:  <span className="saving">{overviewObj.Savings}</span><br/>
+                            Expenses:  <span className="neg">{overviewObj.Expense}</span>
                         </h2>
                     </div>
                     <div className="keys">
@@ -121,33 +123,25 @@ export class Overview extends Component {
         )
     }
 
-    handleSortClick = (event)=>{
-        document.querySelector(`#${this.state.sorting}`).classList.remove("sorting");
-        this.setState({
-            sorting: event.target.id,
-            sorted: event.target.id === "allTransactions" ? ["Income", "Expense"] : [event.target.id]
-        }, () =>{
-            console.log(this.state.sorted)
-            document.querySelector(`#${this.state.sorting}`).classList.add("sorting");
-            this.handleGetTransactionsByMonth();
-        })
+    function handleSortClick(event) {
+        document.querySelector(`#${sorting}`).classList.remove("sorting");
+        setSorting(event.target.id);
+        setSorted(event.target.id === "allTransactions" ? ["Income", "Expense"] : [event.target.id])
     }
-
-    render() {
         return (
             <div className="main">
                 <div className="selector">
-                    <div className="arrow selectorLeft" onClick={this.handleOnPrevMonthClick}>&#9664;</div>
-                    <div className="selectorCenter">{this.state.months[this.state.currentMonthIndex]}</div>
-                    <div className="arrow selectorRight" onClick={this.handleOnNextMonthClick}>&#9658;</div>
+                    <div className="arrow selectorLeft" onClick={handleOnPrevMonthClick}>&#9664;</div>
+                    <div className="selectorCenter">{months[currentMonthIndex]}</div>
+                    <div className="arrow selectorRight" onClick={handleOnNextMonthClick}>&#9658;</div>
                 </div>
-                {this.state.isLoaded ? this.renderOverview(): ""}
+                {isLoaded ? renderOverview(): ""}
                 <div className="filterContainer">
                     <Link className="addButton" to='/add-expense'>+ Expense</Link>
                     <div className="selector">
-                        <div className="selection" id="allTransactions" onClick={this.handleSortClick}>All Transactions</div>
-                        <div className="selection" id="Income" onClick={this.handleSortClick}>Income</div>
-                        <div className="selection" id="Expense" onClick={this.handleSortClick}>Expenses</div>
+                        <div className="selection" id="allTransactions" onClick={handleSortClick}>All Transactions</div>
+                        <div className="selection" id="Income" onClick={handleSortClick}>Income</div>
+                        <div className="selection" id="Expense" onClick={handleSortClick}>Expenses</div>
                     </div>
                     <Link className="addButton" to = '/add-income'>+ Income</Link>
                 </div>
@@ -162,13 +156,12 @@ export class Overview extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {this.renderTransactionList()}
+                            {/*{renderTransactionList()}*/}
                         </tbody>
                     </table>
                 </div>
             </div>
         )
     }
-}
 
 export default Overview
