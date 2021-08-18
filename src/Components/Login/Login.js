@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Axios from "../utils/Axios";
@@ -7,42 +7,37 @@ import "./Login.css";
 import jwtDecode from "jwt-decode";
 import checkIfUserIsAuth from "../utils/checkIfUserIsAuth";
 
-export class Login extends Component {
-  state = {
-    username: "",
-    password: "",
-    loginError: "",
-    toastError: true,
-  };
 
-  componentDidMount() {
+function Login(props) {
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  useEffect(() => {
     let isAuth = checkIfUserIsAuth();
     if (isAuth) {
-      this.props.history.push("/overview");
+      props.history.push("/overview");
     }
-  }
+  }, [])
 
-  handleOnChange = ()=>{
-    this.setState({
-        username : document.querySelector("#username").value,
-        password : document.querySelector("#password").value,
-    });
+  function handleOnChange() {
+    setUsername(document.querySelector("#username").value);
+    setPassword(document.querySelector("#password").value);
   }
   
-  handleOnSubmit = async(event) =>{
+  async function handleOnSubmit(event) {
     event.preventDefault();
     try{
         const loginCred = {
-          username : this.state.username,
-          password : this.state.password
+          username : username,
+          password : password
         }
         const success = await Axios.post('/api/users/login', loginCred)
         let jwtToken = success.data.payload;
-        console.log(success)
         setAxiosAuthToken(jwtToken)
         let decodedToken = jwtDecode(jwtToken)
         console.log(decodedToken)
-        this.props.handleUserLogin(decodedToken)
+        props.handleUserLogin(decodedToken)
         window.localStorage.setItem('jwtToken', success.data.payload);
         toast.success(`Login Successful`, {
             position: "top-center",
@@ -53,12 +48,10 @@ export class Login extends Component {
             draggable: true,
             progress: undefined,
         })
-        this.props.history.push("/overview");
+        props.history.push("/overview");
     }catch(e){
       console.log(e)
       if(e.response.status === 400){
-
-        
         toast.error(`Login Unsuccessful, check username and/or password`, {
             position: "top-center",
             autoClose: 5000,
@@ -79,40 +72,39 @@ export class Login extends Component {
         progress: undefined,
 })
 }}}
-  render() {
-    return (
-      <div className="container">
-        <div className="form-text">Login</div>
-        <div className="form-div">
-          <form className="form" onSubmit= {this.handleOnSubmit}>
-            <div className="block-container">
+  return (
+    <div className="container">
+      <div className="form-text">Login</div>
+      <div className="form-div">
+        <form className="form" onSubmit= {handleOnSubmit}>
+          <div className="block-container">
+            <input
+                type="username"
+                id="username"
+                placeholder="Username"
+                name="username"
+                onChange={handleOnChange}
+            />
+          </div>
+          <div className="block-container">
               <input
-                  type="username"
-                  id="username"
-                  placeholder="Username"
-                  name="username"
-                  onChange={this.handleOnChange}
+                type="text"
+                id="password"
+                placeholder="Password"
+                name="password"
+                onChange={handleOnChange}
               />
-            </div>
-            <div className="block-container">
-                <input
-                  type="text"
-                  id="password"
-                  placeholder="Password"
-                  name="password"
-                  onChange={this.handleOnChange}
-                />
-            </div>
-            <div className="button-container">
-              <button type="submit">
-                Login
-              </button>
-            </div>
-          </form>
-        </div>
-        <ToastContainer/>
+          </div>
+          <div className="button-container">
+            <button type="submit">
+              Login
+            </button>
+          </div>
+        </form>
       </div>
-    );
-  }
+      <ToastContainer/>
+    </div>
+  );
 }
-export default Login;
+
+export default Login
