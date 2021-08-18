@@ -10,8 +10,17 @@ import Expense from './Components/EnterExpense/Expense';
 import Profile from './Components/Profile/Profile';
 import PasswordReset from './Components/PasswordReset/PasswordReset';
 import Expired from './Components/PasswordReset/Expired';
+import {categoryContext} from './Context/context'
 
 const MainRouter = (props) => {
+    function showCategory(){
+        return(
+            <categoryContext.Provider value={{}}>
+                <Expense/>
+                <Overview/>
+            </categoryContext.Provider>
+        )
+    }
     return(
         <Router>
             <Nav user={props.user} handleUserLogout = {props.handleUserLogout}/>
