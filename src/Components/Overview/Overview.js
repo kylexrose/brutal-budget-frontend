@@ -67,7 +67,7 @@ function Overview () {
         }
     }
 
-    async function renderTransactionList() {
+    function renderTransactionList() {
         return(
         transactionList.map(item => {
             const className = item.type === "Expense" ? "neg" : "";
@@ -156,7 +156,7 @@ function Overview () {
                             </tr>
                         </thead>
                         <tbody>
-                            {/*{renderTransactionList()}*/}
+                            {renderTransactionList()}
                         </tbody>
                     </table>
                 </div>
