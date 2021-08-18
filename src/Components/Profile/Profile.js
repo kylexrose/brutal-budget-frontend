@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import Axios from "../utils/Axios";
 import './Profile.css';
 import {isEmail} from 'validator';
@@ -7,119 +7,101 @@ import Confirmation from '../Confirmation/Confirmation';
 import { Link } from 'react-router-dom';
 import CategoryList from '../CategoryList/CategoryList';
 
-export class Profile extends Component {
-    state = {
-        userData : {},
-        emailToggle: false,
-        email: "",
-        confirmToggle: false,
-    }
+function Profile() {
 
-    componentDidMount(){
-        this.retrieveUserData()
-    }
+    const [userData, setUserData] = useState({});
+    const [emailToggle, setEmailToggle] = useState(false);
+    const [email, setEmail] = useState("");
+    const [confirmToggle, setConfirmToggle] = useState(false);
 
-    retrieveUserData = async () =>{
+    useEffect(() => {
+        retrieveUserData()
+    }, [])
+
+    useEffect(() => {
+        setEmail(userData.email)
+    }, [userData])
+
+    async function retrieveUserData() {
         try{
             const userData = await Axios.get(`/api/users/get-user-data`);
-            this.setState({
-                userData: userData.data.payload,
-            }, () =>{
-                this.setState({
-                    email : this.state.userData.email,
-                })
-            })
+            setUserData(userData.data.payload)
         }catch(e){
             console.log(e)
         }
     }
 
-    handleEditClick = (event) =>{
-        this.setState({
-            [event.target.id] : !this.state[event.target.id],
-        })
+    function handleEditClick() {
+        setEmailToggle(!emailToggle);
     }
 
-    handleSaveClick = async () =>{
-        if(isEmail(this.state.email)){
+    async function handleSaveClick() {
+        if(isEmail(email)){
             document.querySelector('#email').disabled = true;
-            this.setState({
-                confirmToggle: true,
-            })
+            setConfirmToggle(true)
         }else{
             toast.error(`Email must be valid`);
-            this.setState({
-                emailToggle: false,
-            })
+            setEmailToggle(false)
         }
     }
 
-    handleOnChange = (event)=>{
-        this.setState({
-            [event.target.id] : event.target.value,
-        })
+    function handleOnChange(event) {
+        setEmail(event.target.value)
     }
 
-    handleSubmitPassword = async(password)=>{
+    async function handleSubmitPassword(password) {
         try{
-            const updatedProfile = await Axios.put('/api/users/update-profile', {email: this.state.email, password: password});
-            console.log(updatedProfile.data.payload.email)
-            this.setState({
-                email: updatedProfile.data.payload.email,
-                confirmToggle: false,
-                emailToggle: false,
-            })
-
+            const updatedProfile = await Axios.put('/api/users/update-profile', {email: email, password: password});
+            setEmail(updatedProfile.data.payload.email);
+            setConfirmToggle(false);
+            setEmailToggle(false)
         }catch(e){
             console.log(e)
         }
     }
 
-    handleResetClick = async ()=>{
+    async function handleResetClick() {
         try{
             await Axios.post("/api/mailjet/reset-password", {
-                firstName: this.state.userData.firstName, 
-                lastName: this.state.userData.lastName,
-                email : this.state.userData.email,
+                firstName: userData.firstName, 
+                lastName: userData.lastName,
+                email : userData.email,
             });
             toast.success('Password Reset Link has been sent.')
         }catch(e){
             console.log(e)
         }
     }
-
-    render() {
-        return (
-            <div className="body">
-                <Link className="addButton back" to="/overview">Back</Link>
-                {this.state.confirmToggle ? <Confirmation handleSubmitPassword={this.handleSubmitPassword}/> : ""}
-                <div className="profileContainer">
-                <table>
-                    <tbody>
-                        <tr className="inputBlock">
-                            <td className="label">Username</td>
-                            <td> {this.state.userData.username}</td>
-                            <td className="button" onClick={this.handleResetClick}>Reset Password</td>
-                        </tr>
-                        {!this.state.emailToggle ? 
-                        <tr className="inputBlock">
-                            <td className="label">Email</td>
-                            <td> {this.state.email}</td>
-                            <td className="button" id="emailToggle" onClick={this.handleEditClick}>Change Email</td>
-                        </tr> :
-                        <tr className="inputBlock">
-                            <td className="label">Email</td>
-                            <td><input type= "text" id="email" value= {this.state.email} onChange={this.handleOnChange}/></td>
-                            <td className="button" onClick={this.handleSaveClick}>Save</td>
-                        </tr>}
-                    </tbody>
-                </table>
-            </div>
-            <CategoryList/>
-            </div>
-            
-        )
-    }
+    return (
+        <div className="body">
+            <Link className="addButton back" to="/overview">Back</Link>
+            {confirmToggle ? <Confirmation handleSubmitPassword={handleSubmitPassword}/> : ""}
+            <div className="profileContainer">
+            <table>
+                <tbody>
+                    <tr className="inputBlock">
+                        <td className="label">Username</td>
+                        <td> {userData.username}</td>
+                        <td className="button" onClick={handleResetClick}>Reset Password</td>
+                    </tr>
+                    {!emailToggle ? 
+                    <tr className="inputBlock">
+                        <td className="label">Email</td>
+                        <td> {email}</td>
+                        <td className="button" id="emailToggle" onClick={handleEditClick}>Change Email</td>
+                    </tr> :
+                    <tr className="inputBlock">
+                        <td className="label">Email</td>
+                        <td><input type= "text" id="email" value= {email} onChange={handleOnChange}/></td>
+                        <td className="button" onClick={handleSaveClick}>Save</td>
+                    </tr>}
+                </tbody>
+            </table>
+        </div>
+        <CategoryList/>
+        </div>
+        
+    )
 }
 
 export default Profile
