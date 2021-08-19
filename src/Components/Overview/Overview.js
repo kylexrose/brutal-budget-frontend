@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import './Overview.css';
 import Axios from '../utils/Axios';
-import {PieChart} from 'react-minimal-pie-chart';
 import { Link } from 'react-router-dom';
 import Chart from 'chart.js/auto'
+import randomColor from 'randomcolor'
 
 function Overview () {
     
@@ -31,7 +31,6 @@ function Overview () {
     }, [currentMonthIndex])
 
     useEffect(() => {
-        console.log(Object.keys(overviewObj))
         if(Object.keys(overviewObj).length !== 0){
             setIsLoaded(true);
         }else{
@@ -62,7 +61,6 @@ function Overview () {
                 {sorted: sorted})
             setTransactionList( monthlyTransactions.data.payload.transactions )
             setOverviewObj(monthlyTransactions.data.sumObj)
-            console.log(monthlyTransactions)
         }catch(e){
             console.log(e)
         }
@@ -85,43 +83,58 @@ function Overview () {
     }
 
     function setUpChart(){
-        document.querySelector("#chartContainer").innerHTML= '<canvas id="chart"></canvas>';
-        var ctx = document.getElementById('chart');
-var myChart = new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-        labels: [
-          'Expenses',
-          'Savings',
-          'Expendable'
-        ],
-        datasets: [{
-          label: 'Overview',
-          data: [
-            overviewObj.Expense, 
-            overviewObj.Savings, 
-            overviewObj.Income - (overviewObj.Expense + overviewObj.Savings)
-            ],
-          backgroundColor: [
-            'rgb(255, 99, 132)',
-            'rgb(54, 162, 235)',
-            'rgb(255, 205, 86)'
-          ],
-          hoverOffset: 4
-        }],
-      },
-    options: {
-        plugins: {
-            legend: {
-                display: false
+        let labels = []; 
+        let amounts =[];
+        let colors = [];
+        if(sorting === "allTransactions" || sorting === "Income"){
+            document.querySelector("#chartContainer").innerHTML= '<canvas id="chart"></canvas>';
+            labels = [
+                'Expenses',
+                'Savings',
+                'Expendable'
+                ];
+            amounts = [
+                overviewObj.Expense, 
+                overviewObj.Savings, 
+                overviewObj.Income - (overviewObj.Expense + overviewObj.Savings)
+                ];
+            colors = [
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+                'rgb(255, 205, 86)'
+            ]
+        }else{
+            document.querySelector("#chartContainer").innerHTML= '<canvas id="chart"></canvas>';
+            for (let key in overviewObj.category){
+                labels.push(key);
+                amounts.push(overviewObj.category[key]);
+                colors.push(randomColor())
             }
         }
-    }
-});
+        
+        var ctx = document.getElementById('chart');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                label: 'Overview',
+                data: amounts,
+                backgroundColor: colors,
+                hoverOffset: 4
+                }],
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
     }
 
     function renderOverview() {
-        console.log(overviewObj)
         if(transactionList.length === 0){
             return (
                 <div className= "overview">
@@ -141,7 +154,8 @@ var myChart = new Chart(ctx, {
                         <h2>
                             Income:  {overviewObj.Income}<br/>
                             Savings:  <span className="saving">{overviewObj.Savings}</span><br/>
-                            Expenses:  <span className="neg">{overviewObj.Expense}</span>
+                            Expenses:  <span className="neg">{overviewObj.Expense}</span><br/>
+                            Remaining: <span className="remaining">{overviewObj.Income - (overviewObj.Expense + overviewObj.Savings)}</span>
                         </h2>
                     </div>
                     <div className="keys">
