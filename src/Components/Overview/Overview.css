@@ -57,7 +57,7 @@ a{
     color:white;
     width: 75%;
     max-width: 500px;
-    height: 200px;
+    height: 300px;
     background-color: #2d6072;
     border-radius: 10px;
     box-shadow: 2px 2px 5px gray;
@@ -103,9 +103,14 @@ td{
     color:rgb(75, 196, 75)
 }
 
-.chart{
-    height: 170px;
-    
+#chart{
+    margin: 20px;
+    padding: 20px;
+    height: 250px;
+}
+
+.overviewTable{
+    margin-right: 10px;
 }
 
 .keys{
