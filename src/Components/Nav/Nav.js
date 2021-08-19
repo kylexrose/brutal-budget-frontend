@@ -16,6 +16,37 @@ export class Nav extends Component {
                     <p>Brutal Budget.</p>
                 </Link>
                 <div className="right-side-nav">
+                    <ul>
+                        <li>
+                        {this.props.user ? (
+                            <NavLink activeClassName="selected" to="/profile">
+                            Profile
+                            </NavLink>
+                        ) : (
+                            <NavLink activeClassName="selected" to="/signup">
+                            Sign up
+                            </NavLink>
+                        )}
+                        </li>
+                        <li>
+                        {this.props.user ? (
+                            <NavLink
+                            activeStyle={{ borderBottom: "1px solid white" }}
+                            to="/home"
+                            onClick={this.props.handleUserLogout}
+                            >
+                            Logout
+                            </NavLink>
+                        ) : (
+                            <NavLink
+                            activeStyle={{ borderBottom: "1px solid white" }}
+                            to="/login"
+                            >
+                            Login
+                            </NavLink>
+                        )}
+                        </li>
+                    </ul>
                 </div>
             </div>
         )
