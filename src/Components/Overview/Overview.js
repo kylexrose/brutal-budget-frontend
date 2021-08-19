@@ -8,8 +8,8 @@ import randomColor from 'randomcolor'
 function Overview () {
     
     const [months, ] = useState(["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"])
-    const [currentMonthIndex, setCurrentMonthIndex] = useState(6);
-    const [currentYear, setCurrentYear] = useState(2021);
+    const [currentMonthIndex, setCurrentMonthIndex] = useState(0);
+    const [currentYear, setCurrentYear] = useState(0);
     const [transactionList, setTransactionList] = useState([]);
     const [overviewObj, setOverviewObj] = useState({});
     const [sorting, setSorting] = useState("allTransactions");
@@ -17,7 +17,15 @@ function Overview () {
     const [isLoaded, setIsLoaded] = useState(false)
 
     useEffect(() => {
-        handleGetTransactionsByMonth();
+        const date = JSON.stringify(new Date(Date.now())).slice(1, 11);
+        const convDate = date.split("-");
+        const dateObj = {
+            year: +convDate[0],
+            month: +convDate[1] - 1,
+            day: +convDate[2],
+        }
+        setCurrentMonthIndex(dateObj.month);
+        setCurrentYear(dateObj.year);
     }, [])
 
     useEffect(() => {

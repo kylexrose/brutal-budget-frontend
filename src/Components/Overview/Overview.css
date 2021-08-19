@@ -128,7 +128,9 @@ td{
 
 .sorting{
     background-color: #2d6072;
-    color: white
+    color: white;
+    border-radius: 20px;
+    padding: 8px;
 }
 
 .selection{
