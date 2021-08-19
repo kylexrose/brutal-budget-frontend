@@ -29,6 +29,8 @@
       confirmPasswordOnFocus: false,
       toastError: true,
     };
+
+    
   
     componentDidMount() {
         let isAuth = checkIfUserIsAuth();

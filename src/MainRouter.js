@@ -10,17 +10,9 @@ import Expense from './Components/EnterExpense/Expense';
 import Profile from './Components/Profile/Profile';
 import PasswordReset from './Components/PasswordReset/PasswordReset';
 import Expired from './Components/PasswordReset/Expired';
-import {categoryContext} from './Context/context'
+import ForgotPassword from './Components/ForgotPassword/ForgotPassword'
 
 const MainRouter = (props) => {
-    function showCategory(){
-        return(
-            <categoryContext.Provider value={{}}>
-                <Expense/>
-                <Overview/>
-            </categoryContext.Provider>
-        )
-    }
     return(
         <Router>
             <Nav user={props.user} handleUserLogout = {props.handleUserLogout}/>
@@ -58,6 +50,13 @@ const MainRouter = (props) => {
                     path="/reset-password" 
                     render={(routerProps) =>(
                         <PasswordReset {...routerProps}/>
+                    )}
+                />
+                <Route 
+                    exact 
+                    path="/forgot-password" 
+                    render={() =>(
+                        <ForgotPassword/>
                     )}
                 />
                 <Route component={Expired} exact path="/expired"/>

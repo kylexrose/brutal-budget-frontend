@@ -8,7 +8,7 @@ const initialState= {
 }
 function reducer(state, action){
     switch(action.type){
-        case "LOGIN":  
+        case "GET_CATEGORIES":  
             return {
                 user: {
                     email:action.user.email,
@@ -16,7 +16,7 @@ function reducer(state, action){
                     isAuth: true,
                 }
             };
-        case "LOG_OUT":
+        case "ADD_CATEGORY":
             return {
                 user: null,
             };

@@ -6,6 +6,7 @@ import setAxiosAuthToken from "../utils/setAxiosAuthToken";
 import "./Login.css";
 import jwtDecode from "jwt-decode";
 import checkIfUserIsAuth from "../utils/checkIfUserIsAuth";
+import {Link} from 'react-router-dom'
 
 
 function Login(props) {
@@ -99,7 +100,9 @@ function Login(props) {
             <button type="submit">
               Login
             </button>
+            <Link style={{color:"blue", textDecoration: "underline"}} to='/forgot-password'>Forgot Password</Link>
           </div>
+          
         </form>
       </div>
       <ToastContainer/>
