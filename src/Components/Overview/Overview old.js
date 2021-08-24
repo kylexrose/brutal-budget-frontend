@@ -57,7 +57,6 @@ export class Overview extends Component {
                 transactionList : monthlyTransactions.data.payload.transactions,
                 overviewObj: monthlyTransactions.data.sumObj,
             }, ()=>{
-                console.log(this.state.overviewObj)
                 this.setState({
                     isLoaded: true,
                 })
@@ -127,7 +126,6 @@ export class Overview extends Component {
             sorting: event.target.id,
             sorted: event.target.id === "allTransactions" ? ["Income", "Expense"] : [event.target.id]
         }, () =>{
-            console.log(this.state.sorted)
             document.querySelector(`#${this.state.sorting}`).classList.add("sorting");
             this.handleGetTransactionsByMonth();
         })

@@ -16,18 +16,3 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   );
 };
 export default PrivateRoute;
-// const PrivateRoute = (props) => {
-//   console.log(props);
-//   return <Route exact path={props.path} component={props.component} />;
-// };
-// const PrivateRoute = (props) => {
-//   console.log(props);
-//   return (
-//     <Route
-//       exact
-//       path={props.path}
-//       render={() => <Movie />}
-//       render={() => (props.user ? props.component : <Redirect to="/login" />)}
-//     />
-//   );
-// };

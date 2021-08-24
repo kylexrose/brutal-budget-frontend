@@ -37,7 +37,6 @@ function Login(props) {
         let jwtToken = success.data.payload;
         setAxiosAuthToken(jwtToken)
         let decodedToken = jwtDecode(jwtToken)
-        console.log(decodedToken)
         props.handleUserLogin(decodedToken)
         window.localStorage.setItem('jwtToken', success.data.payload);
         toast.success(`Login Successful`, {

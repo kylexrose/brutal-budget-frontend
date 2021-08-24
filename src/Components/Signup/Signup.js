@@ -195,8 +195,6 @@
       }
     };
     handleOnBlur = (event) => {
-      // console.log(event.target.name);
-      // console.log("handle onBlur Triggered");
       if (this.state[event.target.name].length === 0) {
         this.setState({
           [`${event.target.name}Error`]: `${event.target.placeholder} cannot be empty`,
