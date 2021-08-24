@@ -1,37 +1,47 @@
-import React from 'react'
-import CustomEditHooks from '../hooks/editHooks'
+import React, {useState} from 'react'
+import Axios from '../utils/Axios'
+import './Transaction.css'
+
 
 function Transaction(props) {
     const {item} = props;
-    const [date, dateEdit, dateOnChange, dateToggle] = CustomEditHooks(`${item.date.year} / ${item.date.month} / ${item.date.day}`);
-    const [category, categoryEdit, categoryOnChange, categoryToggle] = CustomEditHooks(item.type === "Income" ? item.type : item.category);
-    const [description, descriptionEdit, descriptionOnChange, descriptionToggle] = CustomEditHooks(item.description);
-    const [amount, amountEdit, amountOnChange, amountToggle] = CustomEditHooks(item.type !== "Income" ? `-${item.amount}` : item.amount);
+    
+    const date = `${item.date.year}-${item.date.month < 10 ? "0"+item.date.month: item.date.month}-${item.date.day < 10 ? "0"+item.date.day: item.date.day}`;
+    const category = item.type === "Income" ? item.type : item.category;
+    const description = item.description;
+    const amount = item.amount;
     const className = item.type === "Expense" ? "neg" : "";
 
+    function generatePopUp(){
+        props.setModal_id(item._id)
+        props.setModalDate(date);
+        props.setModalCategory(category);
+        props.setModalDescription(description);
+        props.setModalAmount(amount);
+        props.openPopUp();
+    }
+
+    async function handleDelete(event){
+        event.preventDefault();
+        try{
+            await Axios.delete(`api/transactions/delete-transaction/${item._id}`)
+            props.handleGetTransactionsByMonth();
+        }catch(e){
+            console.log(e)
+        }
+
+    }
     return(
 
-        <tr key={item._id}>
-            {!dateEdit 
-            ? <td onClick={dateToggle}>{date}</td>
-            : <input type="date" onChange={dateOnChange}/>
-            }
-            {!categoryEdit 
-            ? <td onClick={categoryToggle}>{category}</td>
-            : <input type="text" onChange={categoryOnChange}/>
-            }
-            {!descriptionEdit 
-            ? <td onClick={descriptionToggle}>{description}</td>
-            : <input type="text" onChange={descriptionOnChange}/>
-            }
-            {!amountEdit 
-            ? <td className={className} onClick={amountToggle}>{amount}</td>
-            : <input type="text" onChange={amountOnChange}/>
-            }
-            
-            <button>Save</button>
+        <tr>
+            <td>{date}</td>
+            <td>{category}</td>
+            <td>{description}</td>
+            <td className={className}>{amount}</td>
+            <td className="saveButton button" onClick={generatePopUp}>Edit</td>
+            <td className="deleteButton button" onClick={handleDelete}>Delete</td>
         </tr>
     )
 }
 
-export default Transaction;
+export default Transaction;  

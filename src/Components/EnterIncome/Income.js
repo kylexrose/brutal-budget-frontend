@@ -8,7 +8,7 @@ function Income() {
     const [date, setDate] = useState("");
     const [description, setDescription] = useState("");
     const [amount, setAmount] = useState("");
-    const [amountError, setAmountError] = useState("");
+    const [amountError, ] = useState("");
 
     useEffect(() => {
         setDate(JSON.stringify(new Date(Date.now())).slice(1, 11))

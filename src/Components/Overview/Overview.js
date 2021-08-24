@@ -3,30 +3,47 @@ import './Overview.css';
 import Axios from '../utils/Axios';
 import { Link } from 'react-router-dom';
 import Chart from 'chart.js/auto'
-import randomColor from 'randomcolor'
+import randomColor from 'randomcolor';
+import Transaction from '../transaction/Transaction';
+import PopUp from '../PopUp/PopUp'
 
 function Overview () {
-    
+    const date = JSON.stringify(new Date(Date.now())).slice(1, 11);
+    const convDate = date.split("-");
+    const dateObj = {
+            year: +convDate[0],
+            month: +convDate[1],
+            day: +convDate[2],
+        }
+
     const [months, ] = useState(["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"])
-    const [currentMonthIndex, setCurrentMonthIndex] = useState(0);
-    const [currentYear, setCurrentYear] = useState(0);
+    const [currentMonthIndex, setCurrentMonthIndex] = useState(dateObj.month - 1);
+    const [currentYear, setCurrentYear] = useState(dateObj.year);
     const [transactionList, setTransactionList] = useState([]);
     const [overviewObj, setOverviewObj] = useState({});
     const [sorting, setSorting] = useState("allTransactions");
     const [sorted, setSorted] = useState(["Income", "Expense"]);
     const [isLoaded, setIsLoaded] = useState(false)
 
-    useEffect(() => {
-        const date = JSON.stringify(new Date(Date.now())).slice(1, 11);
-        const convDate = date.split("-");
-        const dateObj = {
-            year: +convDate[0],
-            month: +convDate[1] - 1,
-            day: +convDate[2],
+    const [modal_id, setModal_id] = useState("")
+    const [modalDate, setModalDate] = useState("");
+    const [modalCategory, setModalCategory] = useState("")
+    const [modalDescription, setModalDescription] = useState("")
+    const [modalAmount, setModalAmount] = useState("")
+
+    const [togglePopUp, setTogglePopUp] = useState(false)
+
+    function closePopUp(event){
+        event.preventDefault();
+        setTogglePopUp(false)
+    }
+
+    function openPopUp(event){
+        if(event){
+            event.preventDefault();
         }
-        setCurrentMonthIndex(dateObj.month);
-        setCurrentYear(dateObj.year);
-    }, [])
+        setTogglePopUp(true);
+    }
 
     useEffect(() => {
         async function updateMonth (){
@@ -42,7 +59,7 @@ function Overview () {
         if(Object.keys(overviewObj).length !== 0){
             setIsLoaded(true);
         }else{
-            setIsLoaded(false)
+            setIsLoaded(false);
         }
         
     }, [overviewObj])
@@ -69,6 +86,7 @@ function Overview () {
                 {sorted: sorted})
             setTransactionList( monthlyTransactions.data.payload.transactions )
             setOverviewObj(monthlyTransactions.data.sumObj)
+            
         }catch(e){
             console.log(e)
         }
@@ -76,17 +94,20 @@ function Overview () {
 
     function renderTransactionList() {
         return(
-        transactionList.map(item => {
-            const className = item.type === "Expense" ? "neg" : "";
-            return(
-                <tr key={item._id}>
-                    <td>{`${item.date.year} / ${item.date.month} / ${item.date.day}`}</td>
-                    <td>{item.type === "Income" ? item.type : item.category}</td>
-                    <td>{item.description}</td>
-                    <td className={className}>{item.type !== "Income" ? `-${item.amount}` : item.amount}</td>
-                </tr>
-            )
-        })
+            transactionList.map(item => {
+                return(
+                    <Transaction 
+                    key= {item._id} 
+                    handleGetTransactionsByMonth={handleGetTransactionsByMonth}
+                    setModalDate = {setModalDate}
+                    setModalCategory = {setModalCategory}
+                    setModalDescription = {setModalDescription}
+                    setModalAmount = {setModalAmount}
+                    setModal_id = {setModal_id}
+                    openPopUp = {openPopUp}
+                    item = {item}/>
+                )
+            })
         )
     }
 
@@ -215,6 +236,22 @@ function Overview () {
                     </tbody>
                 </table>
             </div>
+            {togglePopUp 
+            ? <PopUp
+                modal_id = {modal_id}
+                modalDate = {modalDate}
+                setModalDate = {setModalDate}
+                modalCategory = {modalCategory}
+                setModalCategory = {setModalCategory}
+                modalDescription = {modalDescription}
+                setModalDescription = {setModalDescription}
+                modalAmount = {modalAmount}
+                setModalAmount = {setModalAmount}
+                closePopUp = {closePopUp}
+                handleGetTransactionsByMonth = {handleGetTransactionsByMonth}
+            /> 
+            : ""}
+
         </div>
     )
     }

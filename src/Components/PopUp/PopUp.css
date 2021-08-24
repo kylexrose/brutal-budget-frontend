@@ -1,0 +1,10 @@
+.popup{
+    position:fixed;
+    width: 500px;
+    margin: auto;
+    top: 20%;
+}
+
+.popup .input{
+    background-color: #f4b1b3;
+}
