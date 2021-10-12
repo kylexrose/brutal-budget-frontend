@@ -269,7 +269,7 @@
               <div className="errorMessage">{usernameError}</div>
             <div className="block-container">
                 <input
-                  type="text"
+                  type="password"
                   id="password"
                   placeholder="Password"
                   name="password"
@@ -279,7 +279,7 @@
             </div>
             <div className="block-container">
                 <input
-                  type="text"
+                  type="password"
                   id="confirmPassword"
                   placeholder="Confirm Password"
                   name="confirmPassword"

@@ -88,7 +88,7 @@ function Login(props) {
           </div>
           <div className="block-container">
               <input
-                type="text"
+                type="password"
                 id="password"
                 placeholder="Password"
                 name="password"

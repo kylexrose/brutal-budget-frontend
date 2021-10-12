@@ -71,9 +71,9 @@ export class PasswordReset extends Component {
                 <div className="profileContainer">
                     <form onSubmit={this.handleOnSubmit}>
                         <label htmlFor="password">New password</label><span id="error">{this.state.passwordError}</span>
-                        <input type="text" id="password" onChange={this.handleOnChange} onBlur={this.handleOnBlur}/>
+                        <input type="password" id="password" onChange={this.handleOnChange} onBlur={this.handleOnBlur}/>
                         <label htmlFor="confirmPassword">Confirm password</label><span id="error">{this.state.matchError}</span>
-                        <input type="text" id="confirmPassword" onChange={this.handleOnChange} onBlur={this.handleOnBlur}/>
+                        <input type="password" id="confirmPassword" onChange={this.handleOnChange} onBlur={this.handleOnBlur}/>
                         <button type="submit" id="submit">Submit</button>
                     </form>
                 </div>
