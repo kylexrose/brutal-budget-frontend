@@ -1,9 +1,9 @@
 import axios from 'axios'
 
 const Axios = axios.create({
-    baseURL: process.env.NODE_ENV === "development" 
+    baseURL: process.env.REACT_APP_ENV === "development" 
         ? "http://localhost:3001" 
-        : "brutalbudget.kylexrose.com",
+        : "/",
     timeout: 50000,
     })
 
