@@ -6,7 +6,7 @@
   import "./Signup.css";
   import checkIfUserIsAuth from "../utils/checkIfUserIsAuth";
   
-  export class Signup extends Component {
+  function Signup(props) {
     state = {
       firstName: "",
       lastName: "",
@@ -180,7 +180,7 @@
         }
         await Axios.post('/api/users/signup', userInputObj);
         toast.success("User successfully created")
-        this.props.history.push("/login");
+        props.history.push("/login");
       }catch(e){
         console.log(e.response)
         toast.error(`${e.response.data.message}`, {
