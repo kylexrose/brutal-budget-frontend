@@ -76,9 +76,10 @@ function Expense() {
             event.preventDefault();
             try{
                 const savedCategory = await Axios.post('/api/categories/create-new-category', {name: newCategory});
+                setNewCategory('');
                 await getAllCategories();
                 setNewCategoryToggle(false);
-                setCategory(savedCategory.data.name)
+                setCategory(savedCategory.data.name);
                 document.querySelector("#category").value = savedCategory.data.name;
             }catch(e){
                 console.log(e)

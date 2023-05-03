@@ -101,10 +101,11 @@ function PopUp(props) {
         async function handleSaveCategory(event) {
             event.preventDefault();
             try{
-                const newCategory = await Axios.post('/api/categories/create-new-category', {name: newCategory});
+                const savedCategory = await Axios.post('/api/categories/create-new-category', {name: newCategory});
+                setNewCategory('');
                 await getAllCategories();
                 setNewCategoryToggle(false);
-                document.querySelector("#category").value = newCategory.data.name;
+                document.querySelector("#category").value = savedCategory.data.name;
             }catch(e){
                 console.log(e)
             }
