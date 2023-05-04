@@ -20,9 +20,9 @@ function Overview () {
     const [currentMonthIndex, setCurrentMonthIndex] = useState(dateObj.month - 1);
     const [currentYear, setCurrentYear] = useState(dateObj.year);
     const [transactionList, setTransactionList] = useState([]);
+    const [sortedTransactionList, setSortedTransactionList] = useState([])
     const [overviewObj, setOverviewObj] = useState({});
     const [sorting, setSorting] = useState("allTransactions");
-    const [sorted, setSorted] = useState(["Income", "Expense"]);
     const [isLoaded, setIsLoaded] = useState(false)
 
     const [modal_id, setModal_id] = useState("")
@@ -67,7 +67,25 @@ function Overview () {
     useEffect(() => {
         document.querySelector(`#${sorting}`).classList.add("sorting");
         handleGetTransactionsByMonth();
-    }, [sorted])
+    }, [sorting])
+
+    useEffect(() => {
+      const sortedList = [];
+      if (transactionList.length){
+        if(sorting === "allTransactions"){
+            setSortedTransactionList([...transactionList])
+        }else{
+            transactionList.map(transaction =>{
+                if(transaction.type === sorting){
+                    sortedList.push(transaction)
+                }
+            })
+        setSortedTransactionList(sortedList)
+        }
+      }
+      
+    }, [transactionList])
+    
     
     function handleOnNextMonthClick() {
         setCurrentYear(currentMonthIndex === 11 ? currentYear + 1 : currentYear)
@@ -82,8 +100,7 @@ function Overview () {
     async function handleGetTransactionsByMonth() {
         try{
             const monthlyTransactions = await Axios.post(
-                `/api/transactions/get-transactions-by-month/${currentYear}/${currentMonthIndex + 1}`, 
-                {sorted: sorted})
+                `/api/transactions/get-transactions-by-month/${currentYear}/${currentMonthIndex + 1}`)
             setTransactionList( monthlyTransactions.data.payload.transactions )
             setOverviewObj(monthlyTransactions.data.sumObj)
             
@@ -94,7 +111,7 @@ function Overview () {
 
     function renderTransactionList() {
         return(
-            transactionList.map(item => {
+            sortedTransactionList.map(item => {
                 return(
                     <Transaction 
                     key= {item._id} 
@@ -200,7 +217,6 @@ function Overview () {
     function handleSortClick(event) {
         document.querySelector(`#${sorting}`).classList.remove("sorting");
         setSorting(event.target.id);
-        setSorted(event.target.id === "allTransactions" ? ["Income", "Expense"] : [event.target.id])
     }
     return (
         <div className="main">
