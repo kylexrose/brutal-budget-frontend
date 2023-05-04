@@ -87,6 +87,7 @@ function Expense() {
         }
 
         function handleCancelCategory() {
+            setNewCategory('');
             setNewCategoryToggle(false)
         }
 
