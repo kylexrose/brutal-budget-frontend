@@ -55,8 +55,9 @@ const MainRouter = (props) => {
                 <Route 
                     exact 
                     path="/forgot-password" 
-                    render={() =>(
-                        <ForgotPassword/>
+                    render={(routerProps) =>(
+                        <ForgotPassword
+                        {...routerProps}/>
                     )}
                 />
                 <Route component={Expired} exact path="/expired"/>

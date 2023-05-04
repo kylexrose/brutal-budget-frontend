@@ -19,7 +19,7 @@ function ForgotPassword(props) {
                 email : email,
             });
             toast.success('Password Reset Link has been sent to the email provided.')
-            props.history.push("/login");
+            props.history.push('/login')
         }catch(e){
             console.log(e)
         }

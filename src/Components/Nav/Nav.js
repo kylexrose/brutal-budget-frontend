@@ -32,7 +32,7 @@ export class Nav extends Component {
                         {this.props.user ? (
                             <NavLink
                             activeStyle={{ borderBottom: "1px solid white" }}
-                            to="/home"
+                            to="/login"
                             onClick={this.props.handleUserLogout}
                             >
                             Logout
