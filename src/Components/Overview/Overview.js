@@ -215,8 +215,10 @@ function Overview () {
     }
 
     function handleSortClick(event) {
-        document.querySelector(`#${sorting}`).classList.remove("sorting");
+        if(event.target.id !== sorting){
+            document.querySelector(`#${sorting}`).classList.remove("sorting");
         setSorting(event.target.id);
+        }
     }
     return (
         <div className="main">
