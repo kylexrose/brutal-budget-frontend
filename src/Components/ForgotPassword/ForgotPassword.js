@@ -12,7 +12,7 @@ function ForgotPassword(props) {
     async function handleResetClick(e) {
         e.preventDefault();
         try{
-            const getUserInfo = await Axios.get("api/users/get-user-by-email", {email: email});
+            const getUserInfo = await Axios.post("api/users/get-user-by-email", {email: email});
             await Axios.post("/api/mailjet/reset-password", {
                 firstName: getUserInfo.data.firstName, 
                 lastName: getUserInfo.data.lastName,
