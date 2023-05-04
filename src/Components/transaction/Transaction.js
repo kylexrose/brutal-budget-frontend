@@ -21,6 +21,16 @@ function Transaction(props) {
         props.openPopUp();
     }
 
+    function formatCurrency(num){
+        let numStr = `$${JSON.stringify(num)}`;
+        if (!numStr.includes('.')){
+            numStr += '.00'
+        } else if(numStr.split('.')[1].length < 2){
+            numStr += '0';
+        }
+        return numStr;
+    }
+
     async function handleDelete(event){
         event.preventDefault();
         try{
@@ -37,7 +47,7 @@ function Transaction(props) {
             <td>{date}</td>
             <td>{category}</td>
             <td>{description}</td>
-            <td className={className}>{amount}</td>
+            <td className={className}>{formatCurrency(amount)}</td>
             <td className="saveButton button" onClick={generatePopUp}>Edit</td>
             <td className="deleteButton button" onClick={handleDelete}>Delete</td>
         </tr>
