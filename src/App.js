@@ -1,47 +1,36 @@
 import './App.css';
 import MainRouter from './MainRouter';
-import { ToastContainer } from 'react-toastify';
-import React, {Component} from 'react'
+import React, {useState, useEffect} from 'react'
 import jwtDecode from 'jwt-decode';
 import setAxiosAuthToken from './Components/utils/setAxiosAuthToken';
-require('dotenv').config()
+require('dotenv').config();
 
-export class App extends Component {
-  state = {
-    user: null,
-  };
-  componentDidMount(){
+function App() {  
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
     let currentUser = window.localStorage.getItem("jwtToken") ? jwtDecode(window.localStorage.getItem("jwtToken")) : null;
-    if(currentUser && currentUser.exp > (Date.now() / 1000))
-      {this.setState({
-        user: {
-          email: currentUser.email,
-        }
-      })}
+    if(currentUser && currentUser.exp > (Date.now() / 1000)){
+      setUser(currentUser.email);
+    }
+  }, [])
+
+  const handleUserLogin = (user) =>{
+    setUser(user);
   }
 
-  handleUserLogin = (user) =>{
-    this.setState({
-      user: user
-    })
-  }
-
-  handleUserLogout = () =>{
+  const handleUserLogout = () =>{
     setAxiosAuthToken(null)
-    this.setState({
-      user: null
-    })
+    setUser(null)
     window.localStorage.removeItem("jwtToken")
   }
-
-  render(){
   return (
     <div className="App">
-      <ToastContainer position="top-center"/> 
-      <MainRouter handleUserLogin = {this.handleUserLogin} handleUserLogout = {this.handleUserLogout} user = {this.state.user}/>
+      <MainRouter handleUserLogin = {handleUserLogin} handleUserLogout = {handleUserLogout} user = {user} />
     </div>
-  );
-}
+  )
 }
 
 export default App;
+
+

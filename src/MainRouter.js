@@ -10,13 +10,15 @@ import Expense from './Components/EnterExpense/Expense';
 import Profile from './Components/Profile/Profile';
 import PasswordReset from './Components/PasswordReset/PasswordReset';
 import Expired from './Components/PasswordReset/Expired';
-import ForgotPassword from './Components/ForgotPassword/ForgotPassword'
+import ForgotPassword from './Components/ForgotPassword/ForgotPassword';
+import Home from './Components/Index/index';
 
 const MainRouter = (props) => {
     return(
         <Router>
-            <Nav user={props.user} handleUserLogout = {props.handleUserLogout}/>
+            <Nav user={props.user} setAlert={props.setAlert} handleUserLogout = {props.handleUserLogout}/>
             <>
+                <Route exact path="/" component={Home}/>
                 <Route exact path="/signup" component={Signup}/>
                 <Route 
                     exact 
@@ -28,8 +30,7 @@ const MainRouter = (props) => {
                 <PrivateRoute 
                 exact
                 path="/overview" 
-                component={Overview}
-                user={props.user}/>
+                component={Overview}/>
                 <PrivateRoute 
                 exact
                 path="/add-income" 

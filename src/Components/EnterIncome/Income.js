@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import './Income.css';
 import Axios from '../utils/Axios';
-import {toast} from 'react-toastify';
 import { Link } from 'react-router-dom';
+import {Snackbar, Alert} from '@mui/material';
 
 function Income() {
     const [date, setDate] = useState("");
     const [description, setDescription] = useState("");
     const [amount, setAmount] = useState("");
-    const [amountError, ] = useState("");
+    const [alert, setAlert] = useState("");
+    const [alertSeverity, setAlertSeverity] = useState("warning");
 
     useEffect(() => {
         setDate(JSON.stringify(new Date(Date.now())).slice(1, 11))
@@ -26,31 +27,36 @@ function Income() {
 
     async function handleOnSubmit(event) {
         event.preventDefault();
-        if(!amountError){
-            try{
-            const convDate = date.split("-");
-            const dateObj = {
-                year: +convDate[0],
-                month: +convDate[1],
-                day: +convDate[2],
-            }
-            const newTransaction = {
-                date: dateObj,
-                description: description,
-                amount: amount,
-                type: "Income"
-            }
-            await Axios.post('api/transactions/create-new-transaction', newTransaction)
-            setDate(JSON.stringify(new Date(Date.now())).slice(1, 11));
-            setDescription("");
-            setAmount("");
-            toast.success(`Income Added`)
-            }catch(e){
-                console.log(e)
-            }
+        if(!amount || amount <= 0){
+            setAlert('Your income amount must be set.')
+            setAlertSeverity('error');
+            return;
         }
-        
+
+        try{
+        const convDate = date.split("-");
+        const dateObj = {
+            year: +convDate[0],
+            month: +convDate[1],
+            day: +convDate[2],
+        }
+        const newTransaction = {
+            date: dateObj,
+            description: description,
+            amount: amount,
+            type: "Income"
+        }
+        await Axios.post('api/transactions/create-new-transaction', newTransaction)
+        setDate(JSON.stringify(new Date(Date.now())).slice(1, 11));
+        setDescription("");
+        setAmount("");
+        setAlert('Income Added');
+        setAlertSeverity('success')
+        }catch(e){
+            console.log(e)
+        }
     }
+        
     return (
         <div className="main">
             <Link className="addButton back" to="/overview">Back</Link>
@@ -83,6 +89,18 @@ function Income() {
                     onChange={handleOnChange}/>
                     <button className="submit">Enter Income</button>
                 </form>
+                <Snackbar
+                    open={!!alert}
+                    onClose={() => {
+                        setAlert("")
+                        setAlertSeverity("warning")}}
+                    autoHideDuration={4000}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center', }}
+                    >
+                        <Alert severity={alertSeverity}>
+                            {alert}
+                        </Alert>
+                    </Snackbar>
             </div>
         </div>
     )

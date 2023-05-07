@@ -1,85 +1,125 @@
-import React, { Component } from 'react'
+import React, {useState, useEffect} from 'react'
 import {isStrongPassword} from 'validator'
 import QueryString from 'query-string';
 import jwt from "jsonwebtoken";
 import Axios from '../utils/Axios';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
 
-export class PasswordReset extends Component {
-    state={
-        password:"",
-        confirmPassword: "",
-        passwordError:"",
-        matchError:"",
-        id: ""
-    }
 
-    componentDidMount(){
+function PasswordReset(props) {
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [passwordError, setPasswordError] = useState("");
+    const [matchError, setMatchError] = useState("");
+    const [id, setId] = useState("");
+
+
+    useEffect(() => {
         const tokenObj = QueryString.parse(window.location.search);
         try{
             let decodedJwt = jwt.verify(tokenObj.token, process.env.REACT_APP_PRIVATE_JWT_KEY_RESET);
-            this.setState({
-                id : decodedJwt._id
-            })
+                setId(decodedJwt._id);
         }catch(e){
-            this.props.history.push("/expired");
+            props.history.push("/expired");
         }
+    
+    }, [])
+
+    const handlePasswordOnChange = (event) =>{
+        setPassword(event.target.value);
+    };
+
+    const handleConfirmPasswordOnChange = (event) =>{
+        setConfirmPassword(event.target.value);
     }
 
-    handleOnChange = (event) =>{
-        this.setState({
-            [event.target.id] : event.target.value,
-            passwordError: "",
-            matchError: "",
-        })
-    }
-
-    handleOnBlur = (event)=>{
-        if(event.target.id === "password"){
-            if(!isStrongPassword(this.state.password)){
-                this.setState({
-                    passwordError: "Password must contain 1 uppercase, 1 lowercase, 1 number, 1 special character, and must be 8 at least characters long" 
-                })
-            }
+    useEffect(() => {
+        if(!isStrongPassword(password)){
+                setPasswordError("Password must contain 1 uppercase, 1 lowercase, 1 number, 1 special character, and must be 8 at least characters long");
         }
-        if(this.state.password && this.state.confirmPassword){
-            if(this.state.password !== this.state.confirmPassword){
-                this.setState({
-                    matchError : "Passwords do not match"
-                })
-            }
-        }
-    }
+    }, [password]);
 
-    handleOnSubmit = async (event) =>{
+    useEffect(() => {
+        if(confirmPassword !== password){
+                setMatchError("Passwords must match");
+        }
+    }, [confirmPassword]);
+    
+    const handleOnSubmit = async (event) =>{
         event.preventDefault();
-        if(this.state.password === this.state.confirmPassword && isStrongPassword(this.state.password)){
+        if(password === confirmPassword && isStrongPassword(password)){
             try{
-            await Axios.put('/api/reset/password-change', {_id: this.state.id, password: this.state.password});
-            this.props.history.push("/overview")
+            await Axios.put('/api/reset/password-change', {_id: id, password: password});
+            props.history.push("/login")
             }catch(e){
             console.log(e)
             }
         }
-        
     }
 
-    render() {
-        
-
-        return (
-            <div className="body">
-                <div className="profileContainer">
-                    <form onSubmit={this.handleOnSubmit}>
-                        <label htmlFor="password">New password</label><span id="error">{this.state.passwordError}</span>
-                        <input type="password" id="password" onChange={this.handleOnChange} onBlur={this.handleOnBlur}/>
-                        <label htmlFor="confirmPassword">Confirm password</label><span id="error">{this.state.matchError}</span>
-                        <input type="password" id="confirmPassword" onChange={this.handleOnChange} onBlur={this.handleOnBlur}/>
-                        <button type="submit" id="submit">Submit</button>
-                    </form>
-                </div>
-            </div>
-        )
-    }
+    return (
+        <Container component="main" maxWidth="xs" >
+          <CssBaseline />
+          <Box
+            sx={{
+              marginTop: 8,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              padding: 5,
+              borderRadius: 5,
+              background: 'white',
+            }}
+          >
+            <Typography component="h1" variant="h5">
+              Reset Password
+            </Typography>
+            <Box component="form" onSubmit={handleOnSubmit} noValidate sx={{ mt: 1 }}>
+            <TextField
+              error={!!passwordError}
+              helperText = {passwordError}
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              variant="standard"
+              onChange={handlePasswordOnChange}
+            />
+            <TextField
+              error={!!matchError}
+              helperText = {matchError}
+              margin="normal"
+              required
+              fullWidth
+              name="confirmPassword"
+              label="Confirm Password"
+              type="password"
+              id="confirmPassword"
+              autoComplete="current-password"
+              variant="standard"
+              onChange={handleConfirmPasswordOnChange}
+            />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2, borderRadius: 10, backgroundColor: '#ddf1cf', color: 'black' }}
+              >
+                Reset
+              </Button>
+            </Box>
+          </Box>
+        </Container>
+    )
 }
 
 export default PasswordReset

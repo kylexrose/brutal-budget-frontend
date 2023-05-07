@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import Axios from '../utils/Axios'
-import {toast} from 'react-toastify'
 import './PopUp.css'
 
 function PopUp(props) {

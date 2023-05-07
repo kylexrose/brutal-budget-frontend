@@ -1,23 +1,16 @@
 import * as React from 'react';
-import Card from '@mui/material/Card';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-// import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useState, useEffect } from "react";
 import { white } from 'tailwindcss/colors';
-import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 import { isAlpha, isEmail, isAlphanumeric, isStrongPassword } from "validator";
 import Axios from "../utils/Axios";
 import checkIfUserIsAuth from "../utils/checkIfUserIsAuth";
-import { toBeDisabled } from '@testing-library/jest-dom/dist/matchers';
+import {Snackbar, Alert} from '@mui/material';
   
   function Signup(props) {
     const [firstName, setFirstName] = useState("");
@@ -31,15 +24,15 @@ import { toBeDisabled } from '@testing-library/jest-dom/dist/matchers';
     const [usernameError, setUsernameError] = useState("");
     const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");
-    const [confirmPasswordError, setConfirmPasswordError] = useState("");
-    const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+    const [confirmPasswordError, setConfirmPasswordError] = useState("")
     const [firstNameOnFocus, setFirstNameOnFocus] = useState(false);
     const [lastNameOnFocus, setLastNameOnFocus] = useState(false);
     const [emailOnFocus, setEmailOnFocus] = useState(false);
     const [usernameOnFocus, setUsernameOnFocus] = useState(false);
     const [passwordOnFocus, setPasswordOnFocus] = useState(false);
     const [confirmPasswordOnFocus, setConfirmPasswordOnFocus] = useState(false);
-    const [toastError, setToastError] = useState(true);
+    const [alert, setAlert] = useState("");
+    const [alertSeverity, setAlertSeverity] = useState("warning");
   
 
     useEffect(() => {
@@ -170,19 +163,13 @@ import { toBeDisabled } from '@testing-library/jest-dom/dist/matchers';
           password,
         }
         await Axios.post('/api/users/signup', userInputObj);
-        toast.success("User successfully created")
+        setAlert('User successfully created');
+        setAlertSeverity('success');
         props.history.push("/login");
       }catch(e){
-        console.log(e.response)
-        toast.error(`${e.response.data.message}`, {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
+        console.log(e.response);
+        setAlert(`${e.response.data.message}`)
+        setAlertSeverity('error');
         console.log(e.message)
       }
     };
@@ -302,6 +289,18 @@ import { toBeDisabled } from '@testing-library/jest-dom/dist/matchers';
             </Button>
           </Box>
         </Box>
+        <Snackbar
+        open={!!alert}
+        onClose={() => {
+            setAlert("")
+            setAlertSeverity("warning")}}
+        autoHideDuration={4000}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center', }}
+        >
+            <Alert severity={alertSeverity}>
+                {alert}
+            </Alert>
+        </Snackbar>
       </Container>
   );
   }

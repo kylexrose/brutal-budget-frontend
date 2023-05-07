@@ -2,17 +2,18 @@ import React, { useState, useEffect } from 'react';
 import Axios from "../utils/Axios";
 import './Profile.css';
 import {isEmail} from 'validator';
-import {toast} from 'react-toastify';
 import Confirmation from '../Confirmation/Confirmation';
 import { Link } from 'react-router-dom';
 import CategoryList from '../CategoryList/CategoryList';
+import {Snackbar, Alert} from '@mui/material';
 
 function Profile() {
-
     const [userData, setUserData] = useState({});
     const [emailToggle, setEmailToggle] = useState(false);
     const [email, setEmail] = useState("");
     const [confirmToggle, setConfirmToggle] = useState(false);
+    const [alert, setAlert] = useState("");
+    const [alertSeverity, setAlertSeverity] = useState("warning");
 
     useEffect(() => {
         retrieveUserData()
@@ -40,7 +41,8 @@ function Profile() {
             document.querySelector('#email').disabled = true;
             setConfirmToggle(true)
         }else{
-            toast.error(`Email must be valid`);
+            setAlert('Email must be valid');
+            setAlertSeverity('warning');
             setEmailToggle(false)
         }
     }
@@ -67,7 +69,8 @@ function Profile() {
                 lastName: userData.lastName,
                 email : userData.email,
             });
-            toast.success('Password Reset Link has been sent.')
+            setAlert('Password reset link has been sent.');
+            setAlertSeverity('success');
         }catch(e){
             console.log(e)
         }
@@ -99,6 +102,18 @@ function Profile() {
             </table>
         </div>
         <CategoryList/>
+        <Snackbar
+        open={!!alert}
+        onClose={() => {
+            setAlert("")
+            setAlertSeverity("warning")}}
+        autoHideDuration={4000}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center', }}
+        >
+            <Alert severity={alertSeverity}>
+                {alert}
+            </Alert>
+        </Snackbar>
         </div>
         
     )

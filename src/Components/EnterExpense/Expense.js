@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import './Expense.css'
-import Axios from '../utils/Axios'
-import {toast} from 'react-toastify'
+import React, { useState, useEffect } from 'react';
+import './Expense.css';
+import Axios from '../utils/Axios';
 import { Link } from 'react-router-dom';
+import {Snackbar, Alert} from '@mui/material';
 
 function Expense() {
 
@@ -12,28 +12,30 @@ function Expense() {
         const [description, setDescription] = useState("")
         const [amount, setAmount] = useState("")
         const [newCategoryToggle, setNewCategoryToggle] = useState(false)
-        const [newCategory, setNewCategory] = useState("")
+        const [newCategory, setNewCategory] = useState("");
+        const [alert, setAlert] = useState("");
+        const [alertSeverity, setAlertSeverity] = useState("warning");
 
         useEffect(() => {
             setDate(JSON.stringify(new Date(Date.now())).slice(1, 11))
             getAllCategories();
         }, [])
-        
+
         function handleOnChange(event) {
             if(event.target.id === "date"){
-                setDate(event.target.value)
+                setDate(event.target.value);
             }
             else if(event.target.id === "category"){
-                setCategory(event.target.value)
+                setCategory(event.target.value);
             }
             else if(event.target.id === "newCategory"){
                 setNewCategory(event.target.value);
             }
             else if(event.target.id === "amount"){
-                setAmount(event.target.value)
+                setAmount(event.target.value);
             }
             else if(event.target.id === "description"){
-                setDescription(event.target.value)
+                setDescription(event.target.value);
             }
         }
 
@@ -93,6 +95,11 @@ function Expense() {
 
         async function handleOnSubmit(event) {
             event.preventDefault();
+            if(!amount || amount <=0 ){
+                setAlert("You must confirm an amount.");
+                setAlertSeverity("error");
+                return;
+            }
             try{
                 const convDate = date.split("-");
                 const dateObj = {
@@ -112,7 +119,9 @@ function Expense() {
                 setDescription("");
                 setAmount("");
                 setCategory("");
-                toast.success(`Expense Added`)
+                setAlertSeverity('success')
+                setAlert(`Expense Added`)
+                console.log(alert)
             }catch(e){
                 console.log(e)
             }
@@ -173,6 +182,18 @@ function Expense() {
                         </div>
                         <button className="submit" onClick={handleOnSubmit}>Enter Expense</button>
                     </form>
+                    <Snackbar
+                    open={!!alert}
+                    onClose={() => {
+                        setAlert("Snack bar malfunctioning.")
+                        setAlertSeverity("warning")}}
+                    autoHideDuration={4000}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center', }}
+                    >
+                        <Alert severity={alertSeverity}>
+                            {alert}
+                        </Alert>
+                    </Snackbar>
                 </div>
             </div>
         )
