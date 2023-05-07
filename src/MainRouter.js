@@ -11,14 +11,12 @@ import Profile from './Components/Profile/Profile';
 import PasswordReset from './Components/PasswordReset/PasswordReset';
 import Expired from './Components/PasswordReset/Expired';
 import ForgotPassword from './Components/ForgotPassword/ForgotPassword';
-import Home from './Components/Index/index';
 
 const MainRouter = (props) => {
     return(
         <Router>
             <Nav user={props.user} setAlert={props.setAlert} handleUserLogout = {props.handleUserLogout}/>
             <>
-                <Route exact path="/" component={Home}/>
                 <Route exact path="/signup" component={Signup}/>
                 <Route 
                     exact 
