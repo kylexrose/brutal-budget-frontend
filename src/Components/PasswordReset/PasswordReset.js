@@ -28,7 +28,7 @@ function PasswordReset(props) {
             props.history.push("/expired");
         }
     
-    }, [])
+    },[props.history])
 
     const handlePasswordOnChange = (event) =>{
         setPassword(event.target.value);
@@ -48,7 +48,7 @@ function PasswordReset(props) {
         if(confirmPassword !== password){
                 setMatchError("Passwords must match");
         }
-    }, [confirmPassword]);
+    }, [confirmPassword, password]);
     
     const handleOnSubmit = async (event) =>{
         event.preventDefault();

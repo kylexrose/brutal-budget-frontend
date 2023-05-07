@@ -30,7 +30,6 @@ import {Snackbar, Alert} from '@mui/material';
     const [emailOnFocus, setEmailOnFocus] = useState(false);
     const [usernameOnFocus, setUsernameOnFocus] = useState(false);
     const [passwordOnFocus, setPasswordOnFocus] = useState(false);
-    const [confirmPasswordOnFocus, setConfirmPasswordOnFocus] = useState(false);
     const [alert, setAlert] = useState("");
     const [alertSeverity, setAlertSeverity] = useState("warning");
   
@@ -40,49 +39,9 @@ import {Snackbar, Alert} from '@mui/material';
         if (isAuth) {
           props.history.push("/overview");
         }
-    }, [])
+    }, [props.history])
 
     useEffect(() => {
-      handleFirstNameInput();
-    }, [firstName]);
-
-    useEffect(() => {
-      handleLastNameInput();
-    }, [lastName]);
-
-    useEffect(() => {
-      handleUsernameInput();
-    }, [username]);
-
-    useEffect(() => {
-      handleEmailInput();
-    }, [email]);
-    
-    useEffect(() => {
-      handlePasswordInput();
-    }, [password])
-    
-    useEffect(() => {
-      handleConfirmPasswordInput();
-    }, [confirmPassword])
-
-    async function handleOnChange(e) {
-      const funcStr = `set${capitalizeFirstLetter(e.target.name)}('${e.target.value}')`;
-      await eval(funcStr);
-    };
-
-    async function handleOnFocus(e) {
-      const funcStr = `set${capitalizeFirstLetter(e.target.name)}OnFocus('true')`;
-      await eval(funcStr);
-    };
-
-    function capitalizeFirstLetter(str){
-      const splitString = str.split('');
-      splitString[0] = splitString[0].toUpperCase();
-      return splitString.join('');
-    }
-    
-    const handleFirstNameInput = () => {
       if(firstName.length > 0){  
         if (isAlpha(firstName)) {
           setFirstNameError("");
@@ -92,9 +51,9 @@ import {Snackbar, Alert} from '@mui/material';
       }else if(firstNameOnFocus){
         setFirstNameError('First Name can not be empty');
       }
-    };
+    }, [firstName, firstNameOnFocus]);
 
-    const handleLastNameInput = () => {
+    useEffect(() => {
       if(lastName.length > 0){  
         if (isAlpha(lastName)) {
           setLastNameError("");
@@ -104,9 +63,9 @@ import {Snackbar, Alert} from '@mui/material';
       }else if(lastNameOnFocus){
         setLastNameError('Last Name can not be empty');
       }
-    };
-    
-    const handleUsernameInput = () => {
+    }, [lastName, lastNameOnFocus]);
+
+    useEffect(() => {
       if (username.length > 0) {
         if (isAlphanumeric(username)) {
           setUsernameError("");
@@ -116,9 +75,9 @@ import {Snackbar, Alert} from '@mui/material';
       } else if(usernameOnFocus){
         setUsernameError("Username cannot be empty")
       }
-    };
-    
-    const handleEmailInput = () => {
+    }, [username, usernameOnFocus]);
+
+    useEffect(() => {
       if (email.length > 0) {
         if (isEmail(email)) {
           setEmailError("")
@@ -128,9 +87,9 @@ import {Snackbar, Alert} from '@mui/material';
       } else if(emailOnFocus){
         setEmailError("Email cannot be empty");
       }
-    };
+    }, [email, emailOnFocus]);
     
-    const handlePasswordInput = () => {
+    useEffect(() => {
       if (password.length > 0) {
         if (isStrongPassword(password)) {
             setPasswordError("");
@@ -142,13 +101,71 @@ import {Snackbar, Alert} from '@mui/material';
       } else if(passwordOnFocus){
           setPasswordError("Password cannot be empty");
       }
-    };
+    }, [password, passwordOnFocus])
     
-    const handleConfirmPasswordInput = () => {
+    useEffect(() => {
       if (password !== confirmPassword) {
-          setConfirmPasswordError("Passwords do not match")
-      } else {
-          setConfirmPasswordError("");
+        setConfirmPasswordError("Passwords do not match")
+    } else {
+        setConfirmPasswordError("");
+    }
+    }, [confirmPassword, password])
+
+    async function handleOnChange(e) {
+      const {name, value} = e.target;
+      switch(name){
+        case('firstName'):{
+          setFirstName(`${value}`)
+          break;
+        }
+        case('lastName'):{
+          setLastName(`${value}`)
+          break;
+        }
+        case('username'):{
+          setUsername(`${value}`)
+          break;
+        }
+        case('email'):{
+          setEmail(`${value}`)
+          break;
+        }
+        case('password'):{
+          setPassword(`${value}`)
+          break;
+        }
+        case('confirmPassword'):{
+          setConfirmPassword(`${value}`)
+          break;
+        }
+        default: break;
+      }
+    };
+
+    async function handleOnFocus(e) {
+      const {name, value} = e.target;
+      switch(name){
+        case('firstName'):{
+          setFirstNameOnFocus(`${value}`)
+          break;
+        }
+        case('lastName'):{
+          setLastNameOnFocus(`${value}`)
+          break;
+        }
+        case('username'):{
+          setUsernameOnFocus(`${value}`)
+          break;
+        }
+        case('email'):{
+          setEmailOnFocus(`${value}`)
+          break;
+        }
+        case('password'):{
+          setPasswordOnFocus(`${value}`)
+          break;
+        }
+        default: break;
       }
     };
 

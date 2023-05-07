@@ -53,7 +53,8 @@ function Overview () {
                 console.log(e)
         }}
         updateMonth();
-    }, [currentMonthIndex])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentMonthIndex,])
 
     useEffect(() => {
         if(Object.keys(overviewObj).length !== 0){
@@ -67,23 +68,19 @@ function Overview () {
     useEffect(() => {
         document.querySelector(`#${sorting}`).classList.add("sorting");
         handleGetTransactionsByMonth();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sorting])
 
     useEffect(() => {
-      const sortedList = [];
       if (transactionList.length){
         if(sorting === "allTransactions"){
             setSortedTransactionList([...transactionList])
         }else{
-            transactionList.map(transaction =>{
-                if(transaction.type === sorting){
-                    sortedList.push(transaction)
-                }
-            })
-        setSortedTransactionList(sortedList)
+            const sortedList = transactionList.map(transaction => transaction.type === sorting)
+            setSortedTransactionList(sortedList)
         }
       }
-      
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [transactionList])
     
     

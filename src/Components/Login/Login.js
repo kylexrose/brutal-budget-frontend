@@ -29,16 +29,7 @@ function Copyright(props) {
   );
 }
 
-export default function Login(props) {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
-
+function Login(props) {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -50,7 +41,7 @@ export default function Login(props) {
     if (isAuth) {
       props.history.push("/overview");
     }
-  }, []);
+  },);
 
   function handleOnChange() {
     setUsername(document.querySelector("#username").value);
@@ -165,3 +156,5 @@ export default function Login(props) {
       </Container>
   );
 }
+
+export default Login

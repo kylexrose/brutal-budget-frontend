@@ -15,8 +15,9 @@ import ForgotPassword from './Components/ForgotPassword/ForgotPassword';
 const MainRouter = (props) => {
     return(
         <Router>
-            <Nav user={props.user} setAlert={props.setAlert} handleUserLogout = {props.handleUserLogout}/>
+            <Nav user={props.user} handleUserLogout = {props.handleUserLogout}/>
             <>
+
                 <Route exact path="/signup" component={Signup}/>
                 <Route 
                     exact 
