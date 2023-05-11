@@ -1,17 +1,17 @@
 .navbar{
-    background-color: #1d3e23;
+    background-color: rgb(226, 178, 55);
+    box-shadow: 2px 2px 5px gray;
     height: 75px;
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: white;
-    position: fixed;
     z-index: 1500;
 }
 
 .navbar img{
-    height: 50px;
+    height: 140px;
     width: auto;
 }
 
@@ -36,6 +36,8 @@
     align-items: center;
     justify-content: center;
     width: 300px;
+    height: inherit;
+    color:aliceblue
 }
 
 .right-side-nav{

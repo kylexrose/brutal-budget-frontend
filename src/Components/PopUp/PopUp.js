@@ -26,19 +26,40 @@ function PopUp(props) {
         const [error, setError] = useState(true);
         const [transactionType, setTransactionType] = useState('Expense');
 
+        const ITEM_HEIGHT = 48;
+        const ITEM_PADDING_TOP = 8;
+        const MenuProps = {
+            PaperProps: {
+              style: {
+                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+                width: 250,
+              },
+            },
+          };
+          
+
         useEffect(() => {
             getAllCategories();
         }, [])
 
         useEffect(() => {
-          setError(!date || (!category && transactionType !== "Income") || amount <=0);
-        }, [date, category, amount, transactionType])
+          setError(!date || (!category && !newCategory && transactionType !== "Income") || amount <=0);
+        }, [date, category, newCategory, amount, transactionType])
         
+        function resetStates(){
+            setDate("");
+            setNewCategory("");
+            setCategory("");
+            setDescription("");
+            setAmount("");
+            setNewCategoryToggle(false);
+        }
 
         function handleOnChange(event){
             if(event.target.id === "date"){
                 setDate(event.target.value)
             }else if(event.target.id === "newCategory"){
+                console.log(event.target.value)
                 setNewCategory(event.target.value)
             }else if(event.target.id === "description"){
                 setDescription(event.target.value)
@@ -84,7 +105,7 @@ function PopUp(props) {
                         onChange={handleOnChange}
                     />
             )
-                }else if(transactionType === "Expense" &&!newCategoryToggle){
+                }else if(transactionType === "Expense" && !newCategoryToggle){
                     return(
                         <FormControl fullWidth required>
                             <InputLabel>Category</InputLabel>
@@ -94,6 +115,7 @@ function PopUp(props) {
                                 variant="standard"
                                 value={category}
                                 onChange={handleDropDownOnChange}
+                                MenuProps={MenuProps}
                                 >
                                 {categories.map((category)=>{
                                     return(<MenuItem value={category.name} key={category._id}>{category.name}</MenuItem>)
@@ -107,24 +129,19 @@ function PopUp(props) {
         }}
 
         async function handleSaveCategory(event) {
-            event.preventDefault();
             try{
                 const savedCategory = await Axios.post('/api/categories/create-new-category', {name: newCategory});
-                setNewCategory('');
                 await getAllCategories();
-                setNewCategoryToggle(false);
-                document.querySelector("#category").value = savedCategory.data.name;
+                setCategory(savedCategory.data.name);
             }catch(e){
                 console.log(e)
             }
         }
 
-        function handleCancelCategory() {
-            setNewCategoryToggle(false)
-        }
-
         async function saveTransaction(event){
-            event.preventDefault();
+            if(newCategoryToggle && newCategory){
+                handleSaveCategory();
+            }
             const convDate = date.split("-");
             const dateObj = {
                 year: +convDate[0],
@@ -134,16 +151,22 @@ function PopUp(props) {
             try{
                 const newTransactionInfo = {
                 date: dateObj,
-                category,
+                category: category || newCategory,
                 description,
                 amount,
                 type: transactionType
                 }
             const newTransaction = await Axios.post(`api/transactions/create-new-transaction`, newTransactionInfo);
-            console.log(newTransaction.data)
+            if(newTransaction){
+                props.setAlertSeverity('success');
+                props.setAlert('Transaction Saved!');
+                resetStates();
+            }
             props.closePopUp(event);
             props.handleGetTransactionsByMonth();
             }catch(e){
+                props.setAlertSeverity('error');
+                props.setAlert('Error: There was a problem saving the transaction.');
                 console.log(e)
             }
         }
@@ -200,6 +223,7 @@ function PopUp(props) {
                         type="text"
                         id="description"
                         variant="standard"
+                        onChange= {handleOnChange}
                     />
                     <TextField
                         required

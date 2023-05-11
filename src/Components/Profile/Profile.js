@@ -5,7 +5,17 @@ import {isEmail} from 'validator';
 import Confirmation from '../Confirmation/Confirmation';
 import { Link } from 'react-router-dom';
 import CategoryList from '../CategoryList/CategoryList';
-import {Snackbar, Alert} from '@mui/material';
+import {
+    Snackbar, 
+    Alert, 
+    Container,
+    CssBaseline,
+    Typography,
+    Box,
+    TextField,
+    Button,
+    Grid} from '@mui/material';
+
 
 function Profile() {
     const [userData, setUserData] = useState({});
@@ -76,32 +86,26 @@ function Profile() {
         }
     }
     return (
-        <div className="body">
-            <Link className="addButton back" to="/overview">Back</Link>
-            {confirmToggle ? <Confirmation handleSubmitPassword={handleSubmitPassword}/> : ""}
-            <div className="profileContainer">
-            <table>
-                <tbody>
-                    <tr className="inputBlock">
-                        <td className="label">Username</td>
-                        <td> {userData.username}</td>
-                        <td className="button" onClick={handleResetClick}>Reset Password</td>
-                    </tr>
-                    {!emailToggle ? 
-                    <tr className="inputBlock">
-                        <td className="label">Email</td>
-                        <td> {email}</td>
-                        <td className="button" id="emailToggle" onClick={handleEditClick}>Change Email</td>
-                    </tr> :
-                    <tr className="inputBlock">
-                        <td className="label">Email</td>
-                        <td><input type= "text" id="email" value= {email} onChange={handleOnChange}/></td>
-                        <td className="button" onClick={handleSaveClick}>Save</td>
-                    </tr>}
-                </tbody>
-            </table>
-        </div>
-        <CategoryList/>
+        <Container maxWidth="sm">
+            <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            padding: 5,
+            borderRadius: 5,
+            background: 'white',
+          }}
+        >
+          <Typography component="h1" variant="h5">
+            Profile
+          </Typography>
+          <Box  noValidate sx={{ mt: 1 }}>
+                <Button onClick={handleResetClick}>Reset Password</Button>
+          </Box>
+        </Box>
         <Snackbar
         open={!!alert}
         onClose={() => {
@@ -114,7 +118,47 @@ function Profile() {
                 {alert}
             </Alert>
         </Snackbar>
-        </div>
+        </Container>
+        
+        // <div className="body">
+        //     <Link className="addButton back" to="/overview">Back</Link>
+        //     {confirmToggle ? <Confirmation handleSubmitPassword={handleSubmitPassword}/> : ""}
+        //     <div className="profileContainer">
+        //     <table>
+        //         <tbody>
+        //             <tr className="inputBlock">
+        //                 <td className="label">Username</td>
+        //                 <td> {userData.username}</td>
+        //                 <td className="button" onClick={handleResetClick}>Reset Password</td>
+        //             </tr>
+        //             {!emailToggle ? 
+        //             <tr className="inputBlock">
+        //                 <td className="label">Email</td>
+        //                 <td> {email}</td>
+        //                 <td className="button" id="emailToggle" onClick={handleEditClick}>Change Email</td>
+        //             </tr> :
+        //             <tr className="inputBlock">
+        //                 <td className="label">Email</td>
+        //                 <td><input type= "text" id="email" value= {email} onChange={handleOnChange}/></td>
+        //                 <td className="button" onClick={handleSaveClick}>Save</td>
+        //             </tr>}
+        //         </tbody>
+        //     </table>
+        // </div>
+        // <CategoryList/>
+        // <Snackbar
+        // open={!!alert}
+        // onClose={() => {
+        //     setAlert("")
+        //     setAlertSeverity("warning")}}
+        // autoHideDuration={4000}
+        // anchorOrigin={{ vertical: 'top', horizontal: 'center', }}
+        // >
+        //     <Alert severity={alertSeverity}>
+        //         {alert}
+        //     </Alert>
+        // </Snackbar>
+        // </div>
         
     )
 }

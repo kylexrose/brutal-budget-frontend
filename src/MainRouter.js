@@ -17,7 +17,6 @@ const MainRouter = (props) => {
         <Router>
             <Nav user={props.user} handleUserLogout = {props.handleUserLogout}/>
             <>
-
                 <Route exact path="/signup" component={Signup}/>
                 <Route 
                     exact 

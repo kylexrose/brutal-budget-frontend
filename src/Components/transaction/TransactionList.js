@@ -32,10 +32,12 @@ import Axios from '../utils/Axios';
 import { FormControl } from '@mui/base';
 
 
-function TransactionList({transactionList, 
+function TransactionList({
+    transactionList, 
     handleGetTransactionsByMonth, 
     openPopUp,
-    filter,
+    categories,
+    setCategories,
     setFilter,
     sortingBy,
     setSortingBy,
@@ -48,7 +50,6 @@ function TransactionList({transactionList,
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedDescription, setSelectedDescription] = useState("");
     const [selectedAmount, setSelectedAmount] = useState("");
-    const [categories, setCategories] = useState([])
     const [newCategoryToggle, setNewCategoryToggle] = useState(false)
     const [newCategory, setNewCategory] = useState("")
     const [renderedList, setRenderedList] = useState("");
@@ -56,8 +57,8 @@ function TransactionList({transactionList,
     useEffect(() => { //Builds the table rows from the filtered list
         const build = []
         filteredList.forEach(transaction => {
-            let {date, category, description, amount, _id} = transaction;
-            build.push(createData(date, category, description, amount, _id))
+            let {date, category, description, amount, _id, type} = transaction;
+            build.push(createData(date, category, description, amount, _id, type))
         });
         setRows(build);
     }, [filteredList, transactionList])
@@ -83,19 +84,21 @@ function TransactionList({transactionList,
         )
     }, [categories, selectedCategory, newCategoryToggle, newCategory])
 
-function createData(date, category, description, amount, key) {
+function createData(date, category, description, amount, key, type) {
     return {
     date: `${date.year}-${date.month < 10 ? "0"+ date.month: date.month}-${ date.day < 10 ? "0"+ date.day: date.day}`,
     category,
     description,
     amount,
-    key
+    key,
+    type
     }
 };
 
 async function getAllCategories() {
     try{
         const foundCategories = await Axios.get('api/categories/get-all-categories');
+        console.log(foundCategories)
         setCategories(foundCategories.data.categories);
     }catch(e){
         console.log(e)
@@ -372,7 +375,9 @@ function EnhancedTableToolbar(props) {
       ) : (
         <SortingMenu 
             setFilter = {setFilter}
-            setSortingBy = {setSortingBy}/>
+            setSortingBy = {setSortingBy}
+            getAllCategories = {getAllCategories}
+            />
       )}
     </Toolbar>
   );
@@ -385,7 +390,7 @@ EnhancedTableToolbar.propTypes = {
 
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
-  const [selected, setSelected] = React.useState([]);
+  const [selected,] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -490,9 +495,9 @@ EnhancedTableToolbar.propTypes = {
                       
                     </TableCell>
                     <TableCell align="left">
-                        {editingSelected && selectedTransaction === row.key && row.category !== 'Income' ? 
+                        {editingSelected && selectedTransaction === row.key && row.type !== 'Income' ? 
                             renderedList : 
-                        (row.category)}
+                        (row.category || row.type)}
                     </TableCell>
                     <TableCell align="left">
                         {editingSelected && selectedTransaction === row.key ? (

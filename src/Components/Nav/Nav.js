@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import './Nav.css';
 import logo from "../../local/budgetLogo.png"
 import { NavLink, Link } from 'react-router-dom';
-import menu from '../../local/menuIcon.png'
+import { Typography } from '@mui/material';
+import menu from '../../local/menuIcon.png';
 
 export class Nav extends Component {
     render() {
@@ -12,8 +13,7 @@ export class Nav extends Component {
                     <img src={menu} alt=""/>
                 </div>
                 <Link to="/overview" className="logoContainer">
-                    <img src={logo} alt="logo"/>
-                    <p>Brutal Budget.</p>
+                    <img className="logo" src={logo} alt="logo"/>
                 </Link>
                 <div className="right-side-nav">
                     <ul>

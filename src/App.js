@@ -10,8 +10,9 @@ function App() {
 
   useEffect(() => {
     let currentUser = window.localStorage.getItem("jwtToken") ? jwtDecode(window.localStorage.getItem("jwtToken")) : null;
+    console.log(currentUser)
     if(currentUser && currentUser.exp > (Date.now() / 1000)){
-      setUser(currentUser.email);
+      setUser(currentUser.username);
     }
   }, [])
 

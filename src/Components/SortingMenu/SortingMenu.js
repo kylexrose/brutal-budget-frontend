@@ -3,9 +3,8 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import FilterListIcon from '@mui/icons-material/FilterList'
-import zIndex from '@mui/material/styles/zIndex';
 
-function SortingMenu({setFilter, setSortingBy}) {
+function SortingMenu({setFilter, setSortingBy, getAllCategories}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -16,7 +15,8 @@ function SortingMenu({setFilter, setSortingBy}) {
   };
 
   const handleSortClick = (event) => {
-    setFilter(event.target.id)
+    setFilter(event.target.id);
+    getAllCategories();
     switch(event.target.id){
       case "allTransactionsSort":
         setSortingBy('All Transactions')
@@ -26,6 +26,8 @@ function SortingMenu({setFilter, setSortingBy}) {
         break;
       case "expensesSort":
         setSortingBy('Expenses')
+        break;
+      default: break;
     }
     handleClose(event)
   }
@@ -42,7 +44,6 @@ function SortingMenu({setFilter, setSortingBy}) {
         <FilterListIcon/>
       </Button>
       <Menu
-      sx={{zIndex: 1600}}
         id="demo-positioned-menu"
         aria-labelledby="demo-positioned-button"
         anchorEl={anchorEl}

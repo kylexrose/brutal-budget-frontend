@@ -1,8 +1,9 @@
 .popup{
-    position:fixed;
+    position: absolute;
+    justify-self: center;
     width: 500px;
-    margin: auto;
-    top: 20%;
+    top: 10%;
+    left:30%;
 }
 
 .popup .input{

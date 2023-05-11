@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import './Overview.css';
 import Axios from '../utils/Axios';
-// import Chart from 'chart.js/auto'
-import randomColor from 'randomcolor';
 import TransactionList from '../transaction/TransactionList';
 import PopUp from '../PopUp/PopUp';
 import Chart from '../chart/Chart';
-import {Box, Container, Grid} from '@mui/material';
-import zIndex from '@mui/material/styles/zIndex';
+import {Box, Snackbar, Alert} from '@mui/material';
 
 function Overview () {
     const date = JSON.stringify(new Date(Date.now())).slice(1, 11);
@@ -28,7 +25,9 @@ function Overview () {
     const [sortingBy, setSortingBy] = useState('All Transactions');
     const [togglePopUp, setTogglePopUp] = useState(false);
     const [filteredList, setFilteredList] = useState([]);
-    
+    const [categories, setCategories] = useState([]);
+    const [alert, setAlert] = useState("");
+    const [alertSeverity, setAlertSeverity] = useState("warning");
 
     function closePopUp(event){
         event.preventDefault();
@@ -67,9 +66,9 @@ function Overview () {
             if(filter === "allTransactionsSort"){
                 return true;
             }else if(filter === "incomeSort") {
-                return transaction.category === 'Income'
+                return !transaction.category
             }else {
-                return transaction.category !== 'Income'
+                return transaction.category
             }
         })
         setFilteredList(list);
@@ -108,6 +107,10 @@ function Overview () {
             sortingBy = {sortingBy}
             setSortingBy = {setSortingBy}
             filteredList = {filteredList}
+            categories = {categories}
+            setCategories = {setCategories}
+            setAlert = {setAlert}
+            setAlertSeverity = {setAlertSeverity}
             />
         )
     }
@@ -115,22 +118,35 @@ function Overview () {
     function renderOverview() {
         if(transactionList.length === 0){
             return (
-                // <div className= "overview">
-                //     <h3>No transaction data found.</h3>
-                // </div>
-                ""
+                <div className= "overview" styles={{
+                    display: 'flex',
+                    left:'30%',
+                    top: '50%',
+                    alignContent: 'center',
+                    height: '100lh',
+                   }}>
+                    <h3 styles={{
+                    display: 'flex',
+                    left:'30%',
+                    top: '50%',
+                    alignContent: 'center',
+                    height: '100lh',
+                   }}>No transaction data found.</h3>
+                </div>
             )
         }
 
         return(
 
-               <div styles={{
+               <div className='chartContainer' styles={{
                 display: 'flex',
                 alignContent: 'center',
                 height: '100lh',
-                
                }}>
-                    <Chart filteredList = {filteredList} transactionType= {transactionType}/>
+                    <Chart 
+                    filteredList = {filteredList} 
+                    sortingBy= {sortingBy}
+                    categories= {categories}/>
               </div>
 
         )
@@ -138,12 +154,24 @@ function Overview () {
 
     return (
         <div className='main'>
+            <Snackbar
+                    open={!!alert}
+                    onClose={() => {
+                        setAlert("")
+                        setAlertSeverity("warning")}}
+                    autoHideDuration={4000}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center', }}
+                >
+                    <Alert severity={alertSeverity}>
+                        {alert}
+                    </Alert>
+                </Snackbar>
+
             {isLoaded ? renderOverview(): ""}
             
             <Box sx= {{
                 maxWidth:500,
                 display: 'inline-flex',
-                zIndex: 1500
             }}>
                 {renderTransactionList()}
             </Box>
@@ -151,9 +179,10 @@ function Overview () {
             ? <PopUp
                 closePopUp = {closePopUp}
                 handleGetTransactionsByMonth = {handleGetTransactionsByMonth}
+                setAlert = {setAlert}
+                setAlertSeverity = {setAlertSeverity}
             /> 
             : ""}
-
         </div>
     )
     }
