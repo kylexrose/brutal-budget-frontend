@@ -5,8 +5,6 @@ import Login from './Components/Login/Login';
 import Nav from './Components/Nav/Nav';
 import Overview from './Components/Overview/Overview';
 import PrivateRoute from './Components/PrivateRoute/PrivateRoute'
-import Income from './Components/EnterIncome/Income';
-import Expense from './Components/EnterExpense/Expense';
 import Profile from './Components/Profile/Profile';
 import PasswordReset from './Components/PasswordReset/PasswordReset';
 import Expired from './Components/PasswordReset/Expired';
@@ -29,16 +27,6 @@ const MainRouter = (props) => {
                 exact
                 path="/overview" 
                 component={Overview}/>
-                <PrivateRoute 
-                exact
-                path="/add-income" 
-                component={Income}
-                user={props.user}/>
-                <PrivateRoute 
-                exact
-                path="/add-expense" 
-                component={Expense}
-                user={props.user}/>
                 <PrivateRoute 
                 exact
                 path="/profile" 

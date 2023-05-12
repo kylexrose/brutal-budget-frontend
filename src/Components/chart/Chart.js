@@ -6,30 +6,40 @@ function Chart({filteredList, sortingBy, categories}) {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    if(sortingBy === "All Transactions"){
+    if(!filteredList.length){
+      setData([]);
+    }
+    
+//************************************************************** */
+
+    else if(sortingBy === 'All Transactions'){
         const summaryObj = {Expenses: 0, Income: 0, Savings: 0};
         filteredList.forEach(transaction => {
           switch (transaction.type){
-            case "Income":
+            case 'Income':
               summaryObj.Income += transaction.amount;
               break;
-            case "Expense":
-              if(transaction.category === "Savings"){
+            case 'Expense':
+              if(transaction.category === 'Savings'){
                 summaryObj.Savings += transaction.amount;
               }else{
                 summaryObj.Expenses += transaction.amount;
               }
-              break
+              break;
             default: break;
           }
-        })
+        });
+        const remaining = summaryObj.Income - summaryObj.Expenses - summaryObj.Savings;
         const dataArr = [
-          {name: "Expenses", value: summaryObj.Expenses}, 
-          {name: "Savings", value: summaryObj.Savings},
-          {name: "Remaining", value: summaryObj.Income - summaryObj.Expenses - summaryObj.Savings}
+          {name: 'Expenses', value: summaryObj.Expenses}, 
+          {name: 'Savings', value: summaryObj.Savings},
+          {name: remaining >= 0 ? 'Remaining' : 'Overspent', value: Math.abs(remaining)},
         ];
         setData(dataArr);
-      }else if(sortingBy === "Expenses"){
+      
+      //************************************************************** */
+      
+      }else if(sortingBy === 'Expenses'){
         const summaryObj = {};
         const dataArr = [];
         for(const category of categories){
@@ -44,6 +54,9 @@ function Chart({filteredList, sortingBy, categories}) {
           dataArr.push({name: key, value: summaryObj[key]})
         }
         setData(dataArr)
+      
+      //************************************************************** */
+      
       }else{
         const summaryObj = {Misc : 0};
         const dataArr = [];
@@ -61,7 +74,7 @@ function Chart({filteredList, sortingBy, categories}) {
         }
         setData(dataArr)
       }
-    }, [sortingBy, filteredList, categories])
+    }, [sortingBy, filteredList, categories]);
   
   
 
@@ -72,16 +85,12 @@ const option = {
   series: [
     {
       type: 'pie',
-      radius: ['30%', '70%'],
-      avoidLabelOverlap: false,
+      radius: '70%',
+      
       itemStyle: {
         borderRadius: 10,
         borderColor: '#fff',
         borderWidth: 2
-      },
-      label: {
-        show: false,
-        position: 'center'
       },
       emphasis: {
         label: {
@@ -91,14 +100,14 @@ const option = {
         }
       },
       labelLine: {
-        show: false
+        show: true
       },
-      responsive: true,
+      // responsive: true,
       maintainAspectRatio: false,
       data: data
     }
   ]
 };
 return <ReactEcharts option={option} style={{height:'750%', width: '750%'}} />;
-} 
+};
 export default Chart;

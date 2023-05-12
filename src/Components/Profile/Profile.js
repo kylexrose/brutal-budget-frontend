@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Axios from "../utils/Axios";
 import './Profile.css';
-import {isEmail} from 'validator';
-import Confirmation from '../Confirmation/Confirmation';
-import { Link } from 'react-router-dom';
-import CategoryList from '../CategoryList/CategoryList';
+// import {isEmail} from 'validator';
+// import Confirmation from '../Confirmation/Confirmation';
+// import { Link } from 'react-router-dom';
+// import CategoryList from '../CategoryList/CategoryList';
 import {
     Snackbar, 
     Alert, 
@@ -12,16 +12,14 @@ import {
     CssBaseline,
     Typography,
     Box,
-    TextField,
-    Button,
-    Grid} from '@mui/material';
+    Button,} from '@mui/material';
 
 
 function Profile() {
     const [userData, setUserData] = useState({});
-    const [emailToggle, setEmailToggle] = useState(false);
-    const [email, setEmail] = useState("");
-    const [confirmToggle, setConfirmToggle] = useState(false);
+    // const [emailToggle, setEmailToggle] = useState(false);
+    // const [email, setEmail] = useState("");
+    // const [confirmToggle, setConfirmToggle] = useState(false);
     const [alert, setAlert] = useState("");
     const [alertSeverity, setAlertSeverity] = useState("warning");
 
@@ -29,9 +27,9 @@ function Profile() {
         retrieveUserData()
     }, [])
 
-    useEffect(() => {
-        setEmail(userData.email)
-    }, [userData])
+    // useEffect(() => {
+    //     setEmail(userData.email)
+    // }, [userData])
 
     async function retrieveUserData() {
         try{
@@ -42,35 +40,35 @@ function Profile() {
         }
     }
 
-    function handleEditClick() {
-        setEmailToggle(!emailToggle);
-    }
+    // function handleEditClick() {
+    //     setEmailToggle(!emailToggle);
+    // }
 
-    async function handleSaveClick() {
-        if(isEmail(email)){
-            document.querySelector('#email').disabled = true;
-            setConfirmToggle(true)
-        }else{
-            setAlert('Email must be valid');
-            setAlertSeverity('warning');
-            setEmailToggle(false)
-        }
-    }
+    // async function handleSaveClick() {
+    //     if(isEmail(email)){
+    //         document.querySelector('#email').disabled = true;
+    //         setConfirmToggle(true)
+    //     }else{
+    //         setAlert('Email must be valid');
+    //         setAlertSeverity('warning');
+    //         setEmailToggle(false)
+    //     }
+    // }
 
-    function handleOnChange(event) {
-        setEmail(event.target.value)
-    }
+    // function handleOnChange(event) {
+    //     setEmail(event.target.value)
+    // }
 
-    async function handleSubmitPassword(password) {
-        try{
-            const updatedProfile = await Axios.put('/api/users/update-profile', {email: email, password: password});
-            setEmail(updatedProfile.data.payload.email);
-            setConfirmToggle(false);
-            setEmailToggle(false)
-        }catch(e){
-            console.log(e)
-        }
-    }
+    // async function handleSubmitPassword(password) {
+    //     try{
+    //         const updatedProfile = await Axios.put('/api/users/update-profile', {email: email, password: password});
+    //         setEmail(updatedProfile.data.payload.email);
+    //         setConfirmToggle(false);
+    //         setEmailToggle(false)
+    //     }catch(e){
+    //         console.log(e)
+    //     }
+    // }
 
     async function handleResetClick() {
         try{

@@ -44,24 +44,24 @@ function TransactionList({
     filteredList}) {
 
     const [rows, setRows] = useState([]);
-    const [selectedTransaction, setSelectedTransaction] = useState("");
+    const [selectedTransaction, setSelectedTransaction] = useState('');
     const [editingSelected, setEditingSelected] = useState(false);
-    const [selectedDate, setSelectedDate] = useState("");
-    const [selectedCategory, setSelectedCategory] = useState("");
-    const [selectedDescription, setSelectedDescription] = useState("");
-    const [selectedAmount, setSelectedAmount] = useState("");
+    const [selectedDate, setSelectedDate] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [selectedDescription, setSelectedDescription] = useState('');
+    const [selectedAmount, setSelectedAmount] = useState('');
     const [newCategoryToggle, setNewCategoryToggle] = useState(false)
-    const [newCategory, setNewCategory] = useState("")
-    const [renderedList, setRenderedList] = useState("");
+    const [newCategory, setNewCategory] = useState('')
+    const [renderedList, setRenderedList] = useState('');
 
     useEffect(() => { //Builds the table rows from the filtered list
-        const build = []
+        const build = [];
         filteredList.forEach(transaction => {
             let {date, category, description, amount, _id, type} = transaction;
-            build.push(createData(date, category, description, amount, _id, type))
+            build.push(createData(date, category, description, amount, _id, type));
         });
         setRows(build);
-    }, [filteredList, transactionList])
+    }, [filteredList, transactionList]);
 
     useEffect(() => { //Builds the category list within the table's edit function
         setRenderedList(
@@ -72,21 +72,21 @@ function TransactionList({
                 variant="standard" 
                 value={selectedCategory}
                 onChange={handleOnDropdownChange}
-                >
-                    {categories.map((category)=>{
-                        return(<MenuItem value={category.name} key={category._id}>{category.name}</MenuItem>)
-                    })}
+            >
+                {categories.map((category)=>{
+                    return(<MenuItem value={category.name} key={category._id}>{category.name}</MenuItem>)
+                })}
                     <MenuItem value="addNew">Add New Category</MenuItem>
     
             </Select></FormControl>
             :
                 <TextField id={"categoryText"} label="Category" variant="standard" value={newCategory} onChange={handleOnChange}></TextField>
         )
-    }, [categories, selectedCategory, newCategoryToggle, newCategory])
+    }, [categories, selectedCategory, newCategoryToggle, newCategory]);
 
 function createData(date, category, description, amount, key, type) {
     return {
-    date: `${date.year}-${date.month < 10 ? "0"+ date.month: date.month}-${ date.day < 10 ? "0"+ date.day: date.day}`,
+    date: `${date.year}-${date.month < 10 ? '0'+ date.month: date.month}-${ date.day < 10 ? '0'+ date.day: date.day}`,
     category,
     description,
     amount,
@@ -98,7 +98,6 @@ function createData(date, category, description, amount, key, type) {
 async function getAllCategories() {
     try{
         const foundCategories = await Axios.get('api/categories/get-all-categories');
-        console.log(foundCategories)
         setCategories(foundCategories.data.categories);
     }catch(e){
         console.log(e)
@@ -122,9 +121,7 @@ function getComparator(order, orderBy) {
 }
 
 // TODO
-// Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
-// stableSort() brings sort stability to non-modern browsers (notably IE11). If you
-// only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
+// We will only support modern browsers so we can replace stableSort(exampleArray, exampleComparator)
 // with exampleArray.slice().sort(exampleComparator)
 function stableSort(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index]);
@@ -179,20 +176,20 @@ function handleOnChange(event){
         case('amountText'):
             setSelectedAmount(event.target.value);
             break;
-        default: break
+        default: break;
     }
 }
 
 function handleOnDropdownChange(e){
-    if(e.target.value === "addNew"){
-        setNewCategoryToggle(true)
+    if(e.target.value === 'addNew'){
+        setNewCategoryToggle(true);
     }else{
-        setSelectedCategory(e.target.value)
+        setSelectedCategory(e.target.value);
     }
 }
 
 function handleRowClick(row){
-    setSelectedTransaction(row.key)
+    setSelectedTransaction(row.key);
     setSelectedDate(row.date);
     setSelectedCategory(row.category);
     setSelectedDescription(row.description);
@@ -202,13 +199,13 @@ function handleRowClick(row){
 
 function handleOnCloseClick(){
     setEditingSelected(false);
-    setSelectedTransaction("");
-    setSelectedTransaction("")
-    setSelectedDate("");
-    setSelectedCategory("");
-    setSelectedDescription("");
-    setSelectedAmount("");
-    setNewCategory("");
+    setSelectedTransaction('');
+    setSelectedTransaction('')
+    setSelectedDate('');
+    setSelectedCategory('');
+    setSelectedDescription('');
+    setSelectedAmount('');
+    setNewCategory('');
     setNewCategoryToggle(false);
 }
 
@@ -222,12 +219,12 @@ async function saveTransaction(){
                 console.log(e)
             }
     }
-    const convDate = selectedDate.split("-");
+    const convDate = selectedDate.split('-');
     const dateObj = {
         year: +convDate[0],
         month: +convDate[1],
         day: +convDate[2],
-    }
+    };
     try{
         const updatedInfo = {
         date: dateObj,
@@ -389,7 +386,7 @@ EnhancedTableToolbar.propTypes = {
 
 
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('calories');
+  const [orderBy, setOrderBy] = React.useState('date');
   const [selected,] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -539,7 +536,7 @@ EnhancedTableToolbar.propTypes = {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[5, 10]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}

@@ -8,22 +8,21 @@ require('dotenv').config();
 function App() {  
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    let currentUser = window.localStorage.getItem("jwtToken") ? jwtDecode(window.localStorage.getItem("jwtToken")) : null;
-    console.log(currentUser)
+  useEffect(() => { //Check for user in localStorage, auto login
+    let currentUser = window.localStorage.getItem('jwtToken') ? jwtDecode(window.localStorage.getItem("jwtToken")) : null;
     if(currentUser && currentUser.exp > (Date.now() / 1000)){
       setUser(currentUser.username);
     }
-  }, [])
+  }, []);
 
   const handleUserLogin = (user) =>{
     setUser(user);
   }
 
   const handleUserLogout = () =>{
-    setAxiosAuthToken(null)
-    setUser(null)
-    window.localStorage.removeItem("jwtToken")
+    setAxiosAuthToken(null);
+    setUser(null);
+    window.localStorage.removeItem('jwtToken')
   }
   return (
     <div className="App">
